@@ -1,9 +1,12 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const location = useLocation();
   const path = location.pathname;
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <motion.nav
@@ -49,12 +52,34 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Right - CTA */}
-      <div className="flex items-center justify-end w-1/3">
+      {/* Right - Mobile Toggle */}
+      <div className="flex lg:hidden items-center justify-end w-1/3">
+        <button onClick={() => setIsOpen(!isOpen)} className="text-white/70 hover:text-white p-2 focus:outline-none">
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Right - Desktop CTA */}
+      <div className="hidden lg:flex items-center justify-end w-1/3">
         {/* <Button variant="secondary" className="rounded-full px-5 py-2.5 h-auto text-[13px] font-medium bg-white text-black hover:bg-[#e0e0e0] transition-colors">
           Request Access
         </Button> */}
       </div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-[80px] left-0 right-0 bg-[#0A0A0A] border-b border-white/10 flex flex-col p-6 shadow-2xl z-50 lg:hidden"
+          >
+            <Link to="/docs" onClick={() => setIsOpen(false)} className={`py-4 text-[15px] font-medium border-b border-white/[0.05] ${path.startsWith('/docs') ? 'text-white' : 'text-zinc-400'}`}>Docs</Link>
+            <a href="#context-owner" onClick={() => setIsOpen(false)} className="py-4 text-[15px] font-medium border-b border-white/[0.05] text-zinc-400">Features</a>
+            <Link to="/blog" onClick={() => setIsOpen(false)} className={`py-4 text-[15px] font-medium ${path.startsWith('/blog') ? 'text-white' : 'text-zinc-400'}`}>Blog</Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }

@@ -34,7 +34,7 @@ export default function Hero() {
     <section className="relative w-full max-w-[1442px] mx-auto min-h-[850px] bg-black flex flex-col font-sans border-b border-[#1c1c1c] text-white">
 
       {/* Background Simulation */}
-      <div className="absolute inset-y-0 w-[100vw] left-[calc(50%-50vw)] [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none">
+      <div className="absolute inset-y-0 w-[100vw] left-[calc(50%-50vw)] [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_80%,transparent)] md:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pointer-events-none">
         <FluidMatrix />
       </div>
 

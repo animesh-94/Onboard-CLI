@@ -229,9 +229,10 @@ export default function BentoGrid() {
             subtitle="Don't just read code see it. Spawns a localized React canvas bridging terminal AST outputs to high-fidelity visual node graphs."
             description="Instantly translate tens of thousands of lines of complex logic into a navigable, infinite canvas. Running onboard map spins up a secure, zero-telemetry local rendering engine. Zoom effortlessly from a macro-architecture overview down to individual function execution threads. By hooking into runtime traces, the mapper illuminates active data pathways, letting you watch how payloads move through your system in real-time."
             imageNode={
-              <div className="w-full h-full min-h-[350px] md:min-h-[450px] border border-white/[0.05] rounded-xl bg-[#050505] shadow-2xl relative overflow-hidden flex flex-col font-mono">
-                {/* Canvas Background Grid */}
-                <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+              <div className="w-full h-full min-h-[350px] md:min-h-[450px] border border-white/[0.05] rounded-xl bg-[#050505] shadow-2xl relative overflow-x-auto overflow-y-hidden flex flex-col font-mono scrollbar-hide">
+                <div className="min-w-[800px] h-full relative flex-1">
+                  {/* Canvas Background Grid */}
+                  <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
 
                 {/* SVG Connections */}
                 <svg className="absolute inset-0 w-full h-full z-0 pointer-events-none">
@@ -297,9 +298,10 @@ export default function BentoGrid() {
                   <div className="w-6 h-6 flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-colors">-</div>
                 </div>
 
-                <div className="absolute top-4 left-4 flex gap-2">
-                  <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] rounded">Live Trace</div>
-                  <div className="px-2 py-1 bg-white/5 border border-white/10 text-white/50 text-[10px] rounded">ReqID: req_99x2</div>
+                  <div className="absolute top-4 left-4 flex gap-2">
+                    <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] rounded">Live Trace</div>
+                    <div className="px-2 py-1 bg-white/5 border border-white/10 text-white/50 text-[10px] rounded">ReqID: req_99x2</div>
+                  </div>
                 </div>
               </div>
             }
