@@ -61,9 +61,6 @@ export default function Features() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <Button size="lg" className="rounded-full px-8 py-[24px] text-[15px] shadow-[0_0_32px_rgba(255,255,255,0.15)] hover:shadow-[0_0_48px_rgba(255,255,255,0.28)] bg-white text-black hover:bg-zinc-100">
-              Install Onboard-CLI
-            </Button>
           </motion.div>
         </div>
       </div>
