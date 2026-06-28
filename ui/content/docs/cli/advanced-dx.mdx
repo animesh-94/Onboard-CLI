@@ -1,0 +1,46 @@
+---
+title: "Advanced DX Commands"
+description: "Reduce onboarding friction with Blast Radius analysis, Context Ownership, and Dead Code detection."
+order: 3
+---
+
+Reading code is only half the battle. These commands are designed to answer the hardest questions new engineers face in a massive distributed system.
+
+## `onboard impact` (Blast Radius Analyzer)
+
+Never break production blindly. Standard tools show you what a file *imports*. `onboard impact` performs a **Reverse-Dependency Traversal** to show you what imports *your* file.
+
+```bash
+onboard impact --target <function_signature>
+```
+
+**Output:** Triggers the React canvas to render a red-tinted reverse tree. If you change a core memory allocator in C++, this command maps the exact API gateways and Java schedulers that will instantly break.
+
+## `onboard owners` (Context Owner Engine)
+Stop guessing who to tag for a PR review. This command bypasses superficial `git blame` logs by cross-referencing deep commit history with AST node density.
+
+```bash
+onboard owners --target src/engine/scheduler.java
+```
+
+**Output:** A terminal table ranking the true architects of the module.
+- **Primary Owner:** The engineer who wrote the highest percentage of the active, executing logic.
+- **Recent Contributor:** The engineer who last successfully merged a PR modifying this execution path.
+
+## `onboard config` (Configuration Tracer)
+Tracking down where a YAML config value is actually used at runtime is a nightmare in microservices.
+
+```bash
+onboard config --var MAX_THREADS
+```
+
+**Output:** A linear visual path bridging the `.env` or `docker-compose.yml` file injection point directly down to the exact class constructor where the variable is utilized.
+
+## `onboard pulse` (Dead Code Checker)
+Don't waste three days reading a deprecated module.
+
+```bash
+onboard pulse --dir src/legacy_services/
+```
+
+**Output:** Flags "Cold Zones" (files with zero Git commits in 12 months and no incoming AST dependencies) vs. "Hot Zones" (actively executed code paths).

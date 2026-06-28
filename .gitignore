@@ -1,0 +1,8 @@
+# Compiled Go binaries
+*.exe
+onboard-cli.exe
+onboard-cli
+
+# OS files
+.DS_Store
+Thumbs.db

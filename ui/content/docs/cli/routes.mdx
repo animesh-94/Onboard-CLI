@@ -1,0 +1,43 @@
+---
+title: "Map Entry Points (routes)"
+description: "Automatically trace backend API perimeters and map HTTP/gRPC routes directly to their handler functions."
+order: 4
+---
+
+Finding where a request actually enters a distributed backend often requires tracing through opaque layers of middleware, interceptors, and boilerplate. 
+
+The `onboard routes` command bypasses runtime tracing. It uses Tree-sitter AST queries to hunt for framework-specific routing signatures (like Spring Boot annotations or Go `gin` routers) and maps the exposed endpoints directly to the absolute path of the executing business logic.
+
+## Usage
+
+```bash
+onboard routes --protocol <type> --framework <name>
+```
+
+### Required Flags
+* **`--protocol` (string):** The type of communication protocol. Valid options: `rest`, `grpc`, `graphql`.
+* **`--framework` (string):** The specific routing framework to parse. Valid options: `gin` (Go), `spring` (Java), `express` (Node.js), `fastapi` (Python).
+
+### Example: Parsing a Go/Gin API
+If you drop into a massive Go microservice, you can instantly map its perimeter:
+
+```bash
+onboard routes --protocol rest --framework gin
+```
+
+**Terminal Output:**
+```plaintext
+[⚡] Parsing AST for 'gin' routing signatures...
+[✓] Found 24 exposed endpoints.
+
+METHOD   ROUTE                  HANDLER LOCATION
+GET      /api/v1/health         src/api/health.go:12
+POST     /api/v1/order/new      src/handlers/order_handler.go:88
+GET      /api/v1/order/:id      src/handlers/order_handler.go:142
+DELETE   /api/v1/order/:id      src/handlers/order_handler.go:205
+```
+
+## How it Works Under the Hood
+Unlike Swagger or OpenAPI generators that rely on developers writing accurate comments or annotations, `onboard routes` reads the actual execution graph.
+
+For a Go/Gin application, the CLI executes an S-expression query against the AST to find `call_expression` nodes where the function matches `*.GET` or `*.POST`. It extracts the string literal (the route) and maps it to the referenced function pointer, guaranteeing 100% accuracy based on the compiled code.

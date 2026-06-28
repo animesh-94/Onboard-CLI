@@ -1,0 +1,31 @@
+---
+title: "Core Commands: Init & Map"
+description: "How to initialize the AST cache and launch the Visual Execution Canvas."
+order: 2
+---
+
+## `onboard init`
+
+Before Onboard can visualize your architecture, it must build a local intelligence graph. The `init` command traverses your current working directory, ignoring `.gitignore` paths, and uses Tree-sitter to parse the Abstract Syntax Trees (AST) of supported languages.
+
+```bash
+onboard init
+```
+
+What happens under the hood?
+
+- Scans for supported file extensions (.cpp, .java, .go, .ts).
+- Builds a deterministic dependency graph mapping all imports, includes, and cross-file function invocations.
+- Generates a highly compressed `.onboard/cache.db` SQLite file locally.
+
+## `onboard map`
+The crown jewel of the CLI. This command reads your local AST cache and spins up a deeply interactive, zooming node canvas in your browser.
+
+```bash
+onboard map --target <symbol_or_path> [flags]
+```
+
+### Essential Flags
+- `--target` (Required): The specific file, class, or function you want to act as the center of the universe. Example: `--target OrderBook::execute`.
+- `--radius <int>` (Default: 2): Controls the Context Slicer. A radius of 2 means the visualizer will only render nodes up to two dependency hops away from your target. Everything outside this radius is collapsed into a single, opaque "Macro-Node" to prevent visual clutter.
+- `--port <int>` (Default: 3000): Overrides the default local web server port.

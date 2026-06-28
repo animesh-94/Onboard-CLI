@@ -1,0 +1,77 @@
+---
+title: "Architecture Linter (drift)"
+description: "Enforce strict architectural boundaries and catch spaghetti code before it gets merged."
+order: 5
+---
+
+Documentation decays; code is reality. `onboard drift` uses the static AST graph to find architectural violations that standard text-based linters miss, ensuring your intended system design matches the actual execution path.
+
+## Usage
+
+```bash
+onboard drift --ruleset <path_to_yaml>
+```
+
+### The Ruleset File (architecture.yaml)
+To enforce boundaries, you must define them. Create a YAML file in your repository root defining your system's layers and the import restrictions between them.
+
+```yaml
+# 1. Define your architectural boundaries (using regex paths)
+boundaries:
+  api_layer: "src/api/.*"
+  domain_layer: "src/domain/.*"
+  database_layer: "src/db/.*"
+
+# 2. Define the strict rules
+rules:
+  - source: api_layer
+    cannot_import: database_layer
+    message: "Controllers must not talk directly to the DB. Route through the domain_layer."
+  
+  - source: domain_layer
+    cannot_import: api_layer
+    message: "Domain logic must be framework-agnostic. Do not import HTTP handlers."
+```
+
+### Output & CI/CD Integration
+When you run `onboard drift`, the CLI traverses the AST and cross-references all cross-file imports against your YAML ruleset.
+
+```bash
+onboard drift --ruleset architecture.yaml
+```
+
+**Terminal Output:**
+```plaintext
+[⚡] Validating AST against architecture.yaml...
+[!] 2 Architectural Violations Detected:
+
+❌ Violation 1: api_layer -> database_layer
+   File: src/api/order_controller.go:42
+   Rule: Controllers must not talk directly to the DB. Route through the domain_layer.
+   Match: import "github.com/org/repo/src/db/postgres"
+
+❌ Violation 2: domain_layer -> api_layer
+   File: src/domain/user_service.go:18
+   Rule: Domain logic must be framework-agnostic. Do not import HTTP handlers.
+   Match: import "github.com/org/repo/src/api/middleware"
+
+Exiting with code 1.
+```
+
+### Blocking PRs in GitHub Actions
+Because `onboard drift` returns a non-zero exit code (`exit 1`) when a violation is found, it is the perfect tool to run in your CI pipeline to prevent architectural degradation.
+
+```yaml
+name: Architecture Check
+on: [pull_request]
+
+jobs:
+  lint-architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Onboard CLI
+        run: curl -sL https://onboard.dev/install.sh | bash
+      - name: Run Drift Check
+        run: onboard drift --ruleset architecture.yaml
+```

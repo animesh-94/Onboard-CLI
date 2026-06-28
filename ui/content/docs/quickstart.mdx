@@ -1,0 +1,41 @@
+---
+title: "Quickstart"
+description: "Install Onboard-CLI and map your first distributed architecture in under 60 seconds."
+order: 1
+---
+
+Onboard-CLI is a local-first, zero-telemetry engine. It runs entirely on your machine, parsing your codebase into a localized SQLite graph without sending a single byte of your proprietary code to the cloud.
+
+## Installation
+
+Choose the distribution method that matches your ecosystem. Both methods install the identical high-performance Go binary globally on your system.
+
+### Option 1: Standalone Binary (Recommended)
+The fastest way for systems engineers to get started.
+
+```bash
+curl -sL https://onboard.dev/install.sh | bash
+```
+
+### Option 2: NPM Wrapper
+Ideal if you are already working within a Node.js monorepo environment.
+
+```bash
+npm install -g @onboard/cli
+```
+
+## Your First Trace
+Once installed, navigate to the root directory of any complex repository (C++, Java, Go, or TS) and initialize the local AST cache.
+
+```bash
+cd my-massive-monorepo
+onboard init
+```
+
+This will trigger the Tree-sitter engine to index your files. Once complete, launch the interactive visualizer targeting your core entry point:
+
+```bash
+onboard map --target src/main.cpp --radius 3
+```
+
+A localized web server will instantly boot at `http://localhost:3000`, rendering a high-fidelity React canvas of your execution flow.
