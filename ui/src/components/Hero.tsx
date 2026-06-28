@@ -6,13 +6,18 @@ import { FluidMatrix } from '@/components/ui/fluid-matrix';
 import { Copy, Check } from 'lucide-react';
 
 export default function Hero() {
-  const [installTab, setInstallTab] = useState<'curl' | 'npm'>('curl');
+  const [installTab, setInstallTab] = useState<'curl' | 'npm' | 'windows'>('curl');
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    const text = installTab === 'curl'
-      ? 'curl -sL https://onboard.dev/install.sh | bash'
-      : 'npm install -g @onboard/cli';
+    let text = '';
+    if (installTab === 'curl') {
+      text = 'curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash';
+    } else if (installTab === 'npm') {
+      text = 'npm install -g onboard-cli';
+    } else {
+      text = 'Invoke-WebRequest -Uri "https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1" -OutFile "install.ps1"; .\\install.ps1';
+    }
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -56,13 +61,18 @@ export default function Hero() {
           <div className="w-full max-w-[600px] bg-[#0A0A0A] border border-white/[0.1] rounded-xl overflow-hidden mb-8 shadow-2xl relative">
             <div className="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none"></div>
 
-            {/* Tabs */}
             <div className="flex border-b border-white/[0.08] bg-black/40">
               <button
                 onClick={() => setInstallTab('curl')}
                 className={`px-5 py-3 text-[13px] font-medium transition-colors border-b-2 ${installTab === 'curl' ? 'border-emerald-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
               >
-                cURL Script
+                macOS / Linux
+              </button>
+              <button
+                onClick={() => setInstallTab('windows')}
+                className={`px-5 py-3 text-[13px] font-medium transition-colors border-b-2 ${installTab === 'windows' ? 'border-emerald-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
+              >
+                Windows (PowerShell)
               </button>
               <button
                 onClick={() => setInstallTab('npm')}
@@ -74,14 +84,18 @@ export default function Hero() {
 
             {/* Code Content */}
             <div className="p-5 flex items-center justify-between group">
-              <code className="font-mono text-[14px] text-white/80 overflow-x-auto">
-                <span className="text-emerald-500 mr-2">$</span>
-                {installTab === 'curl' ? 'curl -sL https://onboard.dev/install.sh | bash' : 'npm install -g @onboard/cli'}
-              </code>
+              <div className="flex-1 min-w-0 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <code className="font-mono text-[14px] text-white/80 pr-4">
+                  <span className="text-emerald-500 mr-2">{installTab === 'windows' ? '>' : '$'}</span>
+                  {installTab === 'curl' && 'curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash'}
+                  {installTab === 'npm' && 'npm install -g onboard-cli'}
+                  {installTab === 'windows' && 'Invoke-WebRequest -Uri "https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1" -OutFile "install.ps1"; .\\install.ps1'}
+                </code>
+              </div>
 
               <button
                 onClick={handleCopy}
-                className="ml-4 p-2 rounded-md hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                className="ml-2 p-2 rounded-md bg-white/5 hover:bg-white/10 border border-white/5 text-white/70 hover:text-white transition-all flex-shrink-0"
                 title="Copy to clipboard"
               >
                 {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} />}
