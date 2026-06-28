@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 // Load all MDX modules at build time
 const mdxModules = import.meta.glob('/content/docs/**/*.mdx', { eager: true });
-const rawMdxModules = import.meta.glob('/content/docs/**/*.mdx', { as: 'raw', eager: true });
+const rawMdxModules = import.meta.glob('/content/docs/**/*.mdx', { query: '?raw', eager: true });
 
 function generateSlug(text: string) {
   return text.toLowerCase().replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, '-');
@@ -14,9 +14,14 @@ export const docsContext = Object.entries(mdxModules).map(([path, module]: [stri
   const frontmatter = module.frontmatter || {};
 
   const rawData = rawMdxModules[path] as any;
-  const rawText = typeof rawData === 'string' ? rawData : (rawData && typeof rawData === 'object' ? rawData.default : '') || '';
+  let rawText = '';
+  if (typeof rawData === 'string') {
+    rawText = rawData;
+  } else if (rawData && typeof rawData.default === 'string') {
+    rawText = rawData.default;
+  }
 
-  const headingMatches = rawText.match(/^##\s+(.*)/gm) || [];
+  const headingMatches = (typeof rawText === 'string' ? rawText : '').match(/^##\s+(.*)/gm) || [];
   const headings = headingMatches.map((h: any) => {
     // Strip the markdown formatting like backticks and asterisks
     const text = h.replace(/^##\s+/, '').replace(/[`*]/g, '');
