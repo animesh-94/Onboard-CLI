@@ -17,7 +17,7 @@ export const docsContext = Object.entries(mdxModules).map(([path, module]: [stri
   const rawText = typeof rawData === 'string' ? rawData : (rawData && typeof rawData === 'object' ? rawData.default : '') || '';
 
   const headingMatches = rawText.match(/^##\s+(.*)/gm) || [];
-  const headings = headingMatches.map(h => {
+  const headings = headingMatches.map((h: any) => {
     // Strip the markdown formatting like backticks and asterisks
     const text = h.replace(/^##\s+/, '').replace(/[`*]/g, '');
     return { title: text, hash: generateSlug(text) };
@@ -73,7 +73,7 @@ export default function DocsLayout() {
                     </Link>
                     {isActive && doc.headings.length > 0 && (
                       <div className="flex flex-col gap-2 pl-3 mt-1.5 mb-2 border-l border-white/10 ml-0.5">
-                        {doc.headings.map(h => (
+                        {doc.headings.map((h: any) => (
                           <a
                             key={h.hash}
                             href={`#${h.hash}`}

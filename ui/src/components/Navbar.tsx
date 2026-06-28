@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { Button } from './ui/button';
 
 export default function Navbar() {
   const location = useLocation();
@@ -42,9 +41,8 @@ export default function Navbar() {
           </a>
           <Link
             to="/blog"
-            className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${
-              path.startsWith('/blog') ? 'bg-[#2E2E2E] text-white shadow-sm' : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'
-            }`}
+            className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/blog') ? 'bg-[#2E2E2E] text-white shadow-sm' : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'
+              }`}
           >
             Blog
           </Link>
