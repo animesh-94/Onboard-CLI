@@ -1,0 +1,26 @@
+{
+  "name": "onboard-cli",
+  "version": "1.0.0",
+  "description": "Onboard-CLI NPM wrapper for the Go binary",
+  "main": "index.js",
+  "bin": {
+    "onboard": "bin/onboard"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install-binary.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/animesh-94/Onboard-CLI.git"
+  },
+  "keywords": [
+    "cli",
+    "onboard"
+  ],
+  "author": "animesh-94",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/animesh-94/Onboard-CLI/issues"
+  },
+  "homepage": "https://github.com/animesh-94/Onboard-CLI#readme"
+}
