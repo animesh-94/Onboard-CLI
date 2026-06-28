@@ -1,6 +1,5 @@
 import { FluidMatrix } from './ui/fluid-matrix';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { ShieldCheck, TerminalSquare, Unlock } from 'lucide-react';
 
 export default function Features() {

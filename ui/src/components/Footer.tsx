@@ -1,6 +1,4 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export default function Footer() {
   return (
