@@ -14,20 +14,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: ubuntu-latest
             artifact_name: onboard-linux-amd64
-            goarch: amd64
-            goos: linux
-          - os: macos-latest
+          - os: macos-13
             artifact_name: onboard-darwin-amd64
-            goarch: amd64
-            goos: darwin
+          - os: macos-latest
+            artifact_name: onboard-darwin-arm64
           - os: windows-latest
             artifact_name: onboard-windows-amd64.exe
-            goarch: amd64
-            goos: windows
           # Optionally add ARM64 support for M1 Macs
           # - os: macos-latest
           #   artifact_name: onboard-darwin-arm64
@@ -45,8 +40,7 @@ jobs:
 
       - name: Build Binary
         env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 1
         run: |
           go build -ldflags="-s -w" -o ${{ matrix.artifact_name }} main.go
 
