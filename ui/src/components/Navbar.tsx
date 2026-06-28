@@ -28,7 +28,7 @@ export default function Navbar() {
 
       {/* Center - Pill Navigation */}
       <div className="hidden lg:flex items-center justify-center w-1/3">
-        <div className="flex items-center bg-[#1A1A1A]/80 border border-white/[0.05] p-1.5 rounded-full backdrop-blur-xl">
+        <div className="flex items-center bg-[#1A1A1A]/20 border border-white/[0.05] p-1.5 rounded-full backdrop-blur-xl">
           <Link
             to="/docs"
             className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/docs') ? 'bg-[#2E2E2E] text-white shadow-sm' : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'

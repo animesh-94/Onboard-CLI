@@ -104,12 +104,12 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <Button variant="secondary" className="rounded-full px-6 py-6 text-[15px] font-semibold bg-white text-black hover:bg-zinc-200">
+            {/* <Button variant="secondary" className="rounded-full px-6 py-6 text-[15px] font-semibold bg-white text-black hover:bg-zinc-200">
               Get started
             </Button>
             <Button variant="outline" className="rounded-full px-6 py-6 text-[15px] font-semibold bg-transparent border-white/20 text-white hover:bg-white/10">
               Read the docs
-            </Button>
+            </Button> */}
           </div>
         </motion.div>
       </div>
