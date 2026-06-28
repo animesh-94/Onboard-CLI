@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 
 // Load all MDX modules at build time
 const mdxModules = import.meta.glob('/content/docs/**/*.mdx', { eager: true });
@@ -47,14 +48,7 @@ export default function DocsLayout() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-400 font-sans selection:bg-emerald-500/30">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/[0.05] bg-[#0A0A0A]/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-14 flex items-center gap-4">
-          <Link to="/" className="text-white font-bold text-lg tracking-tight">onboard-cli</Link>
-          <div className="h-4 w-px bg-white/10" />
-          <span className="text-sm font-medium text-zinc-300">Documentation</span>
-        </div>
-      </header>
+      <Navbar />
 
       <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row gap-12 pt-8 pb-24">
 
