@@ -37,7 +37,6 @@ export default function ArchitectureDiagram() {
           
           {/* Analysis Engine */}
           <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50" />
             <h4 className="text-blue-400 text-xs font-bold tracking-widest mb-4">ANALYSIS ENGINE</h4>
             <div className="flex flex-col gap-3">
               <div className="bg-black border border-white/[0.1] rounded p-3 text-center">
@@ -60,7 +59,6 @@ export default function ArchitectureDiagram() {
           
           {/* Frontend Delivery */}
           <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/50" />
             <h4 className="text-emerald-400 text-xs font-bold tracking-widest mb-4">FRONTEND DELIVERY</h4>
             <div className="flex flex-col sm:flex-row gap-4 items-center">
               <div className="flex-1 bg-black border border-white/[0.1] rounded p-3 text-center w-full">
@@ -75,7 +73,6 @@ export default function ArchitectureDiagram() {
           
           {/* Security Layer */}
           <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-rose-500/50" />
             <h4 className="text-rose-400 text-xs font-bold tracking-widest mb-4">SECURITY LAYER</h4>
             <div className="flex gap-4">
               <div className="flex-1 bg-black border border-white/[0.1] rounded p-3 text-center">

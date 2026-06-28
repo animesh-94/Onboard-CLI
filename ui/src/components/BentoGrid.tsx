@@ -229,7 +229,7 @@ export default function BentoGrid() {
             subtitle="Don't just read code see it. Spawns a localized React canvas bridging terminal AST outputs to high-fidelity visual node graphs."
             description="Instantly translate tens of thousands of lines of complex logic into a navigable, infinite canvas. Running onboard map spins up a secure, zero-telemetry local rendering engine. Zoom effortlessly from a macro-architecture overview down to individual function execution threads. By hooking into runtime traces, the mapper illuminates active data pathways, letting you watch how payloads move through your system in real-time."
             imageNode={
-              <div className="w-full h-full min-h-[350px] md:min-h-[450px] border border-white/[0.05] rounded-xl bg-[#050505] shadow-2xl relative overflow-x-auto overflow-y-hidden flex flex-col font-mono scrollbar-hide">
+              <div className="w-full h-full min-h-[350px] md:min-h-[450px] border border-white/[0.05] rounded-xl bg-[#050505] shadow-2xl relative overflow-x-auto overflow-y-hidden flex flex-col font-mono [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 <div className="min-w-[800px] h-full relative flex-1">
                   {/* Canvas Background Grid */}
                   <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
