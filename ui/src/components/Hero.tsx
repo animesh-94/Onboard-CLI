@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import { FluidMatrix } from '@/components/ui/fluid-matrix';
 import { Copy, Check } from 'lucide-react';
