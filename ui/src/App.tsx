@@ -9,6 +9,7 @@ import { Analytics } from "@vercel/analytics/react"
 function App() {
   return (
     <Router>
+      <Analytics />
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/blog" element={<BlogIndex />} />
@@ -16,7 +17,6 @@ function App() {
         <Route path="/app" element={<Canvas />} />
         <Route path="/docs" element={<Navigate to="/docs/getting-started" replace />} />
         <Route path="/docs/:slug" element={<DocsLayout />} />
-        <Analytics />
       </Routes>
     </Router>
   );
