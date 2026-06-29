@@ -25,7 +25,14 @@ func Analyze(funcSig string, rootDir string) (*Result, error) {
 	result := &Result{Target: funcSig}
 
 	err := filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
-		if err != nil || info.IsDir() {
+		if err != nil {
+			return nil
+		}
+		if info.IsDir() {
+			name := info.Name()
+			if name == "node_modules" || name == ".git" || name == "dist" {
+				return filepath.SkipDir
+			}
 			return nil
 		}
 		ext := filepath.Ext(path)
