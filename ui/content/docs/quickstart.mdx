@@ -10,18 +10,25 @@ Onboard-CLI is a local-first, zero-telemetry engine. It runs entirely on your ma
 
 Choose the distribution method that matches your ecosystem. Both methods install the identical high-performance Go binary globally on your system.
 
-### Option 1: Standalone Binary (Recommended)
-The fastest way for systems engineers to get started.
+### Option 1: Standalone Binary (Mac/Linux)
+The fastest way for Unix systems engineers to get started.
 
 ```bash
-curl -sL https://onboard.dev/install.sh | bash
+curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash
 ```
 
-### Option 2: NPM Wrapper
+### Option 2: PowerShell (Windows)
+For Windows environments, use the native PowerShell installer.
+
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1" -OutFile "install.ps1"; .\install.ps1
+```
+
+### Option 3: NPM Package
 Ideal if you are already working within a Node.js monorepo environment.
 
 ```bash
-npm install -g @onboard/cli
+npm install -g onboard-cli
 ```
 
 ## Your First Trace

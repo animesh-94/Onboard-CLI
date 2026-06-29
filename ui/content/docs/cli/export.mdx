@@ -1,0 +1,42 @@
+---
+title: "Architecture Export Engine (export)"
+description: "Serialize your SQLite graph data into standard diagram formats (Mermaid, DOT, JSON, PNG)."
+order: 8
+---
+
+Documentation decays; code is reality. The `onboard export` command allows you to serialize the real, living architecture of your codebase into industry-standard formats, making it effortless to drop beautiful diagrams into your READMEs, wikis, or slide decks.
+
+## Usage
+
+```bash
+onboard export --format <format_type> --output <filename>
+```
+
+## Supported Formats
+
+The Export Engine supports 4 native output formats:
+
+1. **Mermaid (`--format mermaid`)**: Generates Markdown-friendly Mermaid.js syntax. Ideal for embedding directly into GitHub READMEs.
+2. **Graphviz DOT (`--format dot`)**: Generates `.dot` syntax with subgraph clusters for legacy backend diagramming tools.
+3. **JSON (`--format json`)**: Outputs a raw, structured JSON dump for ingestion by custom scripts or third-party tooling.
+4. **PNG Image (`--format png`)**: Instantly generates a physical `.png` image file by hitting a lightning-fast external rendering API (Kroki.io) and downloading the buffer directly to your hard drive.
+
+## Powerful Filtering
+
+The export engine supports **Progressive Disclosure Logic**. If your monorepo has 10,000 files, exporting the whole graph will result in an unreadable spaghetti monster.
+
+You can use the `--node` and `--depth` flags to perform a focused recursive BFS traversal:
+
+```bash
+onboard export --format mermaid --node main.go:7 --depth 3 --output subgraph.mmd
+```
+
+This will start at `main.go:7` and only export the nodes and edges that are a maximum of 3 hops away!
+
+## Example Integration
+
+Export a PNG architecture diagram directly to your documentation folder:
+
+```bash
+go run main.go export --format png --output docs/assets/architecture.png
+```

@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"path/filepath"
 
 	"github.com/gorilla/websocket"
 	"github.com/onboard-cli/internal/graph"
@@ -40,9 +41,16 @@ func (s *Server) Start() error {
 		s.serveWs(w, r)
 	})
 
-	// Serve static frontend files from ui/dist
+	// Serve static frontend files from ui/dist with SPA fallback
 	fs := http.FileServer(http.Dir("ui/dist"))
-	http.Handle("/", fs)
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// If path doesn't have an extension, assume it's a React route and serve index.html
+		if r.URL.Path != "/" && filepath.Ext(r.URL.Path) == "" {
+			http.ServeFile(w, r, "ui/dist/index.html")
+			return
+		}
+		fs.ServeHTTP(w, r)
+	})
 
 	log.Printf("Starting visualizer server on %s", s.Addr)
 	return http.ListenAndServe(s.Addr, nil)

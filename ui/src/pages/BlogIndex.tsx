@@ -2,14 +2,23 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-// Mock database of blog posts
 const BLOG_POSTS = [
+  {
+    id: '2',
+    number: 2,
+    title: 'Building the Graph Abstraction Engine: Recursive SQL and Tree-Sitter',
+    preview: 'When we set out to build Onboard-CLI, we knew standard text-based analysis tools (like grep or simple regex scripts) wouldn\'t cut it. Developers need to know exactly how a system connects at a topological level...',
+    date: '2026-06-29',
+    time: '20:15 EST',
+    author: 'Animesh Yadav',
+    timestamp: 1782764100000 // A UNIX timestamp for sorting
+  },
   {
     id: '1',
     number: 1,
     title: 'The Architecture of Onboard-CLI: Built for Speed and Security',
     preview: 'To build Onboard-CLI as a production-grade systems tool, you need an architecture that balances the heavy-lifting of native code analysis with a lightning-fast user experience...',
-    date: '2026-06-29',
+    date: '2026-06-25',
     time: '14:30 EST',
     author: 'Animesh Yadav',
     timestamp: 1782743400000 // A UNIX timestamp for sorting

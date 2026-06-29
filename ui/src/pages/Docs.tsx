@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 
@@ -100,7 +101,7 @@ export default function DocsLayout() {
               prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
               prose-strong:text-zinc-200
               prose-code:text-emerald-300 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
-              prose-pre:bg-[#0A0A0A] prose-pre:border prose-pre:border-white/10 prose-pre:p-4 prose-pre:rounded-xl shadow-2xl"
+              prose-pre:bg-[#0A0A0A] prose-pre:border prose-pre:border-white/10 prose-pre:p-4 prose-pre:rounded-xl prose-pre:whitespace-pre-wrap prose-pre:break-words shadow-2xl"
             >
               <div className="mb-8">
                 <h1 className="mb-2 !text-4xl">{currentDoc.title}</h1>
@@ -108,7 +109,41 @@ export default function DocsLayout() {
                   <p className="text-lg text-zinc-500 !mt-0">{currentDoc.description}</p>
                 )}
               </div>
-              <currentDoc.Component />
+              <currentDoc.Component components={{
+                pre: ({ children, ...props }: any) => {
+                  const [copied, setCopied] = React.useState(false);
+                  const preRef = React.useRef<HTMLPreElement>(null);
+
+                  const handleCopy = () => {
+                    if (preRef.current) {
+                      // Grab text content
+                      const text = preRef.current.innerText;
+                      navigator.clipboard.writeText(text);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }
+                  };
+
+                  return (
+                    <div className="group relative">
+                      <button
+                        onClick={handleCopy}
+                        className="absolute right-3 top-3 p-2 rounded-md bg-zinc-800/80 hover:bg-zinc-700 text-zinc-400 hover:text-emerald-400 opacity-0 group-hover:opacity-100 transition-all z-10 backdrop-blur-sm border border-white/10"
+                        title="Copy code"
+                      >
+                        {copied ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        )}
+                      </button>
+                      <pre ref={preRef} {...props}>
+                        {children}
+                      </pre>
+                    </div>
+                  );
+                }
+              }} />
             </article>
           ) : (
             <div className="text-center py-20 text-zinc-500">Document not found</div>

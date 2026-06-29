@@ -1,0 +1,44 @@
+---
+title: "Blast Radius Analyzer (impact)"
+description: "Evaluate the downstream impact of proposed code changes before deploying."
+order: 7
+---
+
+Never break production blindly. Standard IDE tools show you what a file *imports*. `onboard impact` performs a **Reverse-Dependency Traversal** to show you what imports *your* file.
+
+It calculates the Blast Radius of a proposed refactor, allowing you to see exactly which downstream services, controllers, or modules will be affected if you alter a core piece of logic.
+
+## Usage
+
+```bash
+onboard impact --target <file_path>
+```
+
+## How It Works
+
+`onboard impact` leverages the internal SQLite graph cache built by the `init` command. It takes your target file, runs a reverse-lookup query on the `edges` table, and recursively maps all nodes that have a directed edge pointing *towards* your target.
+
+It then calculates a "Blast Radius Score". A high score means the file is a deeply embedded core dependency (like a database connector or an authentication middleware). A low score means the file is likely a leaf node (like a specific API route or a UI component).
+
+## Example Output
+
+```bash
+onboard impact --target pkg/auth/middleware.go
+```
+
+**Terminal Output:**
+```plaintext
+[INFO] Analyzing blast radius for: pkg/auth/middleware.go
+
+⚠️  HIGH IMPACT DETECTED ⚠️
+
+Blast Radius: 42 files depend on this module.
+Direct Dependencies:
+ - cmd/api/server.go
+ - pkg/routes/users.go
+ - pkg/routes/orders.go
+ - pkg/routes/payments.go
+... (and 38 more)
+
+Recommendation: Exercise extreme caution. Changes to this file require extensive integration testing.
+```

@@ -5,6 +5,7 @@ import (
 
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/smacker/go-tree-sitter/golang"
+	"github.com/smacker/go-tree-sitter/java"
 	"github.com/smacker/go-tree-sitter/javascript"
 	"github.com/smacker/go-tree-sitter/python"
 )
@@ -19,6 +20,7 @@ func NewLanguageRegistry() *LanguageRegistry {
 	goLang := golang.GetLanguage()
 	jsLang := javascript.GetLanguage()
 	pyLang := python.GetLanguage()
+	javaLang := java.GetLanguage()
 	return &LanguageRegistry{
 		languages: map[string]*sitter.Language{
 			".go":  goLang,
@@ -29,6 +31,7 @@ func NewLanguageRegistry() *LanguageRegistry {
 			".ts":  jsLang, // TypeScript uses JS grammar in smacker
 			".tsx": jsLang,
 			".py":  pyLang,
+			".java": javaLang,
 		},
 	}
 }
@@ -68,6 +71,9 @@ var interestingNodes = map[string]bool{
 	"function_definition":  true, // def foo():
 	"class_definition":     true, // class Foo:
 	"decorated_definition": true, // @decorator\ndef/class
+
+	// ── Java ─────────────────────────────────────────────────────────
+	"annotation": true,
 }
 
 // IsNodeInteresting checks if a node is a high-level architectural node we want to map.

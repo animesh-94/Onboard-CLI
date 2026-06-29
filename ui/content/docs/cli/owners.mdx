@@ -1,0 +1,41 @@
+---
+title: "Context Owner Engine (owners)"
+description: "Dynamically calculate real code owners by crossing git history with AST density."
+order: 6
+---
+
+Stop guessing who to tag for a PR review. The `onboard owners` command bypasses superficial `git blame` logs by cross-referencing deep commit history with actual Code volume.
+
+It identifies the true architects of a module by determining who wrote the most lines of active, executing code currently present in the file.
+
+## Usage
+
+```bash
+onboard owners --target <filepath_or_directory>
+```
+
+## How It Works
+
+Traditional code ownership relies on manual `CODEOWNERS` files, which go stale incredibly fast in rapidly moving startups. 
+
+`onboard owners` runs an instantaneous `git blame` aggregation against the requested target. It parses every single line of code in the file, checks the git history to see who authored that specific line, and then aggregates the total line counts to generate a percentage-based ownership breakdown.
+
+## Example Output
+
+```bash
+onboard owners --target src/engine/scheduler.go
+```
+
+**Terminal Output:**
+```plaintext
+[INFO] Analyzing git history for src/engine/scheduler.go...
+
+👑 Code Owners (by active line count):
+1. Alice Smith (alice@startup.com) - 64% (412 lines)
+2. Bob Jones (bob@startup.com) - 21% (135 lines)
+3. Charlie Brown (charlie@startup.com) - 15% (98 lines)
+
+Primary Owner: Alice Smith
+```
+
+You now know exactly who to talk to when making a complex refactor!

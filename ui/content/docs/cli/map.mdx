@@ -1,0 +1,36 @@
+---
+title: "Visual Execution Canvas (map)"
+description: "Parse the AST and visualize your local codebase in an interactive React UI."
+order: 3
+---
+
+The crown jewel of the CLI. The `map` command is designed to bridge the gap between reading flat text files and actually understanding the topological shape of your backend architecture. 
+
+It traverses your codebase using the integrated **Tree-Sitter S-Expression Engine**, maps the relationships, and spins up a deeply interactive, zooming node canvas right in your browser.
+
+## Usage
+
+```bash
+onboard map --target <symbol_or_path> [flags]
+```
+
+## How It Works
+
+1. **AST Extraction**: The core graph abstraction engine parses your code and inserts deterministic symbols (Functions, Classes, Methods) into the local `.onboard/cache.db` SQLite database.
+2. **Topology Generation**: It traverses the database to build a directed graph containing `Nodes` and `Edges`, and outputs the serialized graph to `.onboard/topology.json`.
+3. **Web Server Initialization**: It spins up an embedded React visualizer (built with `@xyflow/react`) serving on `localhost:3000`. This canvas allows you to drag, zoom, and explore the architecture visually!
+
+## Essential Flags
+- `--target` (Required): The specific file, class, or function you want to act as the center of the universe. Example: `--target OrderBook::execute`.
+- `--radius <int>` (Default: 2): Controls the Context Slicer. A radius of 2 means the visualizer will only render nodes up to two dependency hops away from your target. Everything outside this radius is collapsed into a single, opaque "Macro-Node" to prevent visual clutter.
+- `--port <int>` (Default: 3000): Overrides the default local web server port.
+
+## Example Scenario
+
+You just joined a massive monorepo and need to understand how the `Checkout` service works.
+
+Instead of grepping across 14 directories, you run:
+```bash
+onboard map --target services/checkout/main.go
+```
+The browser pops open, and you instantly see that `main.go` calls the `PaymentGateway` struct, imports `utils.Logger`, and implements the `ICheckout` interface. You can drag the nodes around to make sense of the structure visually!

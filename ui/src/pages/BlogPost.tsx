@@ -1,8 +1,95 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ArchitectureDiagram from '../components/ArchitectureDiagram';
+import { useParams } from 'react-router-dom';
 
 export default function Blog() {
+  const { id } = useParams();
+
+  if (id === '2') {
+    return (
+      <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+        <Navbar />
+        <main className="flex-1 max-w-[720px] mx-auto px-6 py-24 w-full">
+          <article className="prose-lg font-serif">
+            <header className="mb-14 font-sans text-center md:text-left">
+              <h1 className="text-[40px] md:text-[52px] font-bold text-white tracking-tight leading-[1.15] mb-6">
+                Building the Graph Abstraction Engine: Recursive SQL and Tree-Sitter
+              </h1>
+              <div className="flex items-center gap-4 text-zinc-500 text-[15px] font-medium justify-center md:justify-start">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                    A
+                  </div>
+                  <span>Animesh Yadav</span>
+                </div>
+                <span>•</span>
+                <span>June 29, 2026</span>
+              </div>
+            </header>
+
+            <div className="space-y-8 text-[18px] md:text-[21px] leading-[1.8] text-[#B0B0B0]">
+              <p className="first-letter:text-6xl first-letter:font-bold first-letter:text-emerald-400 first-letter:mr-2 first-letter:float-left first-letter:leading-none">
+                When we set out to build Onboard-CLI, we knew standard text-based analysis tools (like grep or simple regex scripts) wouldn't cut it. Developers need to know exactly how a system connects at a topological level. To achieve this, we had to engineer a system capable of bridging low-level AST (Abstract Syntax Tree) parsing with high-speed graph traversals. Enter the Graph Abstraction Engine.
+              </p>
+
+              <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
+                The Architecture
+              </h2>
+              <p>
+                At its core, the Graph Abstraction Engine consists of two primary layers operating synchronously within a native Go binary:
+              </p>
+              <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-emerald-500">
+                <li><strong className="text-zinc-200">The Parser (Tree-Sitter):</strong> We embedded C-based Tree-Sitter grammars directly into Go using <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">cgo</code>. This allows the engine to parse massive Go, Python, and Java files into an incredibly dense Node tree. Using S-Expression queries, we extract only the symbols that matter (Functions, Classes, Methods).</li>
+                <li><strong className="text-zinc-200">The Local Cache (SQLite):</strong> Storing this data in memory was impossible for large monorepos. Instead, we pipe the extracted nodes and edges directly into a localized SQLite database hidden inside the <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code> folder.</li>
+              </ul>
+
+              <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
+                The Challenges (and Triumphs)
+              </h2>
+              
+              <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
+                1. CGO Cross-Compilation Hell
+              </h3>
+              <p>
+                Because Tree-Sitter and the SQLite driver (<code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">go-sqlite3</code>) rely on C code, we ran into an immediate wall when developing on Windows. Standard Go builds would crash instantly complaining about missing C compilers. We had to forcefully inject <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">mingw64</code> into the execution paths to correctly compile the binary. It's a massive pain point for users, which is exactly why we ship pre-compiled standalone binaries!
+              </p>
+
+              <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
+                2. The AST Memory Bottleneck
+              </h3>
+              <p>
+                Initially, we attempted to map the entire architecture in Go's memory. When pointing the CLI at a large enterprise codebase, RAM consumption spiked to over 4GB in seconds, crashing the OS memory limits. 
+              </p>
+              <p>
+                <strong>The Solution:</strong> We dumped the memory approach entirely. As the AST parses, it uses a streaming logic to calculate deterministic SHA-256 hashes of nodes (based on file paths and line numbers) and instantly flushes them into the SQLite database. Memory overhead stays at a flat ~40MB, regardless of repo size.
+              </p>
+
+              <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
+                3. The Traversal Speed Limit
+              </h3>
+              <p>
+                With 50,000 nodes and 200,000 edges living in SQLite, running standard SQL <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">JOINs</code> to find the "Blast Radius" or "Dependencies" of a specific function took upwards of 15 seconds. 
+              </p>
+              <p>
+                <strong>The Solution:</strong> We implemented highly optimized <strong>Recursive Common Table Expressions (CTEs)</strong>. Using <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">WITH RECURSIVE bfs(...)</code>, we forced the SQLite engine—which is highly optimized in C—to perform the breadth-first search natively. What used to take 15 seconds now takes less than 80 milliseconds.
+              </p>
+
+              <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
+                The Result
+              </h2>
+              <p>
+                By shifting the heavy lifting down to C-based Tree-Sitter and SQLite CTEs, the Go binary acts merely as an incredibly fast orchestrator. The Graph Abstraction Engine can index an entire repository and spit out a fully linked topology graph in a matter of seconds.
+              </p>
+            </div>
+          </article>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Fallback to Blog 1 for any other ID
   return (
     <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
       <Navbar />

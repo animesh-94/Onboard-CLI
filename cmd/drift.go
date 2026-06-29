@@ -1,23 +1,27 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 
+	"github.com/onboard-cli/internal/parser"
+	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 )
 
 var rulesFile string
 
-// ArchitectureRules defines the structure for our drift YAML file
 type ArchitectureRules struct {
-	Boundaries   map[string]string `yaml:"boundaries"`
-	Restrictions []struct {
-		From         string   `yaml:"from"`
-		CannotAccess []string `yaml:"cannot_access"`
-	} `yaml:"restrictions"`
+	Boundaries map[string]string `yaml:"boundaries"`
+	Rules      []struct {
+		Source       string `yaml:"source"`
+		CannotImport string `yaml:"cannot_import"`
+		Message      string `yaml:"message"`
+	} `yaml:"rules"`
 }
 
 var driftCmd = &cobra.Command{
@@ -78,23 +82,108 @@ type Violation struct {
 	Rule    string
 }
 
-// detectDrift simulates cross-referencing the AST graph against the YAML rules
+var importQueries = map[string]string{
+	".go":   `(import_spec path: (interpreted_string_literal) @import)`,
+	".js":   `(import_statement source: (string) @import)`,
+	".ts":   `(import_statement source: (string) @import)`,
+	".py":   `(import_from_statement module_name: (dotted_name) @import) (import_statement name: (dotted_name) @import)`,
+	".java": `(import_declaration (scoped_identifier) @import)`,
+}
+
 func detectDrift(rules *ArchitectureRules) []Violation {
 	var violations []Violation
 
-	// Example implementation logic:
-	// 1. Compile boundary regexes
 	boundaryRegexes := make(map[string]*regexp.Regexp)
 	for name, pattern := range rules.Boundaries {
 		boundaryRegexes[name] = regexp.MustCompile(pattern)
 	}
 
-	// 2. Iterate through AST Graph Edges (Imports)
-	// For each edge (A imports B):
-	//   Identify which boundary A belongs to.
-	//   Identify which boundary B belongs to.
-	//   Check if rules.Restrictions prohibits A -> B.
-	//   If yes, append to violations.
+	engine := parser.NewEngine()
+
+	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+		if err != nil || info.IsDir() {
+			if info != nil && info.IsDir() && (info.Name() == "node_modules" || info.Name() == ".git" || info.Name() == "dist") {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+
+		ext := filepath.Ext(path)
+		queryStr, supported := importQueries[ext]
+		if !supported {
+			return nil
+		}
+
+		lang := engine.Registry.GetLanguage(path)
+		if lang == nil {
+			return nil
+		}
+
+		q, err := sitter.NewQuery([]byte(queryStr), lang)
+		if err != nil {
+			return nil // invalid query for lang
+		}
+
+		content, err := os.ReadFile(path)
+		if err != nil {
+			return nil
+		}
+
+		p := sitter.NewParser()
+		p.SetLanguage(lang)
+		tree, _ := p.ParseCtx(context.Background(), nil, content)
+
+		qc := sitter.NewQueryCursor()
+		qc.Exec(q, tree.RootNode())
+
+		for {
+			m, ok := qc.NextMatch()
+			if !ok {
+				break
+			}
+			m = qc.FilterPredicates(m, content)
+			for _, c := range m.Captures {
+				importPath := string(c.Node.Content(content))
+				lineNum := int(c.Node.StartPoint().Row + 1)
+
+				// Determine from_boundary (based on file path)
+				var fromBoundary string
+				// normalize path slashes for regex matching
+				normalizedPath := filepath.ToSlash(path)
+				for name, regex := range boundaryRegexes {
+					if regex.MatchString(normalizedPath) {
+						fromBoundary = name
+						break
+					}
+				}
+
+				// Determine to_boundary (based on import string)
+				var toBoundary string
+				for name, regex := range boundaryRegexes {
+					if regex.MatchString(importPath) {
+						toBoundary = name
+						break
+					}
+				}
+
+				if fromBoundary != "" && toBoundary != "" {
+					// Check rules
+					for _, rule := range rules.Rules {
+						if rule.Source == fromBoundary && rule.CannotImport == toBoundary {
+							violations = append(violations, Violation{
+								File:    path,
+								LineNum: lineNum,
+								From:    fromBoundary,
+								To:      toBoundary,
+								Rule:    rule.Message,
+							})
+						}
+					}
+				}
+			}
+		}
+		return nil
+	})
 
 	return violations
 }

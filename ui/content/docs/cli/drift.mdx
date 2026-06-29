@@ -42,20 +42,12 @@ onboard drift --ruleset architecture.yaml
 
 **Terminal Output:**
 ```plaintext
-[⚡] Validating AST against architecture.yaml...
-[!] 2 Architectural Violations Detected:
+Analyzing drift using ruleset: architecture.yaml
 
-❌ Violation 1: api_layer -> database_layer
-   File: src/api/order_controller.go:42
-   Rule: Controllers must not talk directly to the DB. Route through the domain_layer.
-   Match: import "github.com/org/repo/src/db/postgres"
-
-❌ Violation 2: domain_layer -> api_layer
-   File: src/domain/user_service.go:18
-   Rule: Domain logic must be framework-agnostic. Do not import HTTP handlers.
-   Match: import "github.com/org/repo/src/api/middleware"
-
-Exiting with code 1.
+❌ Architectural Violations Detected:
+ - [Line 42] src/api/order_controller.go: api_layer cannot import database_layer (Rule broken: Controllers must not talk directly to the DB. Route through the domain_layer.)
+ - [Line 18] src/domain/user_service.go: domain_layer cannot import api_layer (Rule broken: Domain logic must be framework-agnostic. Do not import HTTP handlers.)
+exit status 1
 ```
 
 ### Blocking PRs in GitHub Actions
@@ -71,7 +63,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Onboard CLI
-        run: curl -sL https://onboard.dev/install.sh | bash
+        run: curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash
       - name: Run Drift Check
         run: onboard drift --ruleset architecture.yaml
 ```
