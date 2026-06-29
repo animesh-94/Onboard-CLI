@@ -8,8 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var framework string
-
+var (
+	framework string
+	protocol  string
+)
 var routesCmd = &cobra.Command{
 	Use:   "routes",
 	Short: "Automatically map backend API routes to their handler functions",
@@ -54,7 +56,10 @@ var routesCmd = &cobra.Command{
 }
 
 func init() {
-	routesCmd.Flags().StringVarP(&framework, "framework", "f", "gin", "The routing framework to target (e.g. gin)")
+	routesCmd.Flags().StringVarP(&protocol, "protocol", "p", "", "The type of communication protocol (rest, grpc, graphql)")
+	routesCmd.MarkFlagRequired("protocol")
+	routesCmd.Flags().StringVarP(&framework, "framework", "f", "", "The routing framework to target (e.g. gin)")
+	routesCmd.MarkFlagRequired("framework")
 	rootCmd.AddCommand(routesCmd)
 }
 

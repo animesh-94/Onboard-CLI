@@ -114,7 +114,7 @@ export default function BentoGrid() {
 
                 {/* IDE Body */}
                 <div className="flex-1 flex overflow-hidden">
-                  
+
                   {/* Left Sidebar (File Tree) */}
                   <div className="w-32 hidden md:block border-r border-white/[0.05] p-3 font-mono text-[10px] bg-[#050505]">
                     <div className="text-zinc-600 mb-2 uppercase tracking-wider text-[9px] font-sans">PROJECT</div>
@@ -145,10 +145,10 @@ export default function BentoGrid() {
                         </div>
                         <div className="text-zinc-300">
                           <span className="text-pink-400">func</span> <span className="text-blue-400">VerifyToken</span>(tokenString <span className="text-emerald-400">string</span>) (*Claims, <span className="text-emerald-400">error</span>) {'{\n'}
-                          <span className="text-zinc-500">  // Parse and validate JWT token</span><br/>
-                          {'  '}token, err := jwt.<span className="text-blue-300">ParseWithClaims</span>(tokenString, &Claims{'{}{}'}, keyFunc)<br/>
+                          <span className="text-zinc-500">  // Parse and validate JWT token</span><br />
+                          {'  '}token, err := jwt.<span className="text-blue-300">ParseWithClaims</span>(tokenString, &Claims{'{}{}'}, keyFunc)<br />
                           {'  '}<span className="text-pink-400">if</span> err != <span className="text-orange-400">nil</span> {'{\n'}
-                          {'    '}<span className="text-pink-400">return</span> <span className="text-orange-400">nil</span>, err<br/>
+                          {'    '}<span className="text-pink-400">return</span> <span className="text-orange-400">nil</span>, err<br />
                           {'  }'}
                         </div>
                       </div>
@@ -162,8 +162,8 @@ export default function BentoGrid() {
                         <span className="text-emerald-400 border-b border-emerald-400 h-full flex items-center">Terminal</span>
                       </div>
                       <div className="p-3 font-mono text-[11px] leading-relaxed overflow-hidden">
-                        <span className="text-emerald-400">$</span> onboard owners --target src/auth<br/>
-                        <span className="text-zinc-500">Analyzing git history & AST dependencies...</span><br/>
+                        <span className="text-emerald-400">$</span> onboard owners --target src/auth<br />
+                        <span className="text-zinc-500">Analyzing git history & AST dependencies...</span><br />
                         <span className="text-emerald-400">Success! Context mapped.</span>
                       </div>
                     </div>
@@ -175,7 +175,7 @@ export default function BentoGrid() {
                       Context Owner Map
                       <span className="text-zinc-600">⋯</span>
                     </div>
-                    
+
                     <div className="text-zinc-400 mb-4 leading-relaxed">
                       Based on AST density and git history, here are the true architects of <span className="text-zinc-200 bg-white/5 px-1 rounded">src/auth</span>:
                     </div>
@@ -199,10 +199,10 @@ export default function BentoGrid() {
                     </div>
 
                     <div className="mt-auto">
-                      <div className="relative border border-white/10 rounded-md bg-[#0A0A0A] p-2 flex items-center">
+                      {/* <div className="relative border border-white/10 rounded-md bg-[#0A0A0A] p-2 flex items-center">
                         <span className="text-zinc-600 italic text-[10px]">Tag @sarah_dev for review...</span>
                         <div className="absolute right-2 text-zinc-500">↑</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
 
@@ -234,69 +234,69 @@ export default function BentoGrid() {
                   {/* Canvas Background Grid */}
                   <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
 
-                {/* SVG Connections */}
-                <svg className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-                  <path d="M 220 225 C 300 225, 300 120, 380 120" stroke="rgba(255,255,255,0.1)" fill="none" strokeWidth="2" strokeDasharray="4 4" />
-                  <path d="M 220 225 C 300 225, 300 330, 380 330" stroke="rgba(16,185,129,0.5)" fill="none" strokeWidth="2" />
-                  <path d="M 540 330 L 620 330" stroke="rgba(16,185,129,0.5)" fill="none" strokeWidth="2" />
+                  {/* SVG Connections */}
+                  <svg className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+                    <path d="M 220 225 C 300 225, 300 120, 380 120" stroke="rgba(255,255,255,0.1)" fill="none" strokeWidth="2" strokeDasharray="4 4" />
+                    <path d="M 220 225 C 300 225, 300 330, 380 330" stroke="rgba(16,185,129,0.5)" fill="none" strokeWidth="2" />
+                    <path d="M 540 330 L 620 330" stroke="rgba(16,185,129,0.5)" fill="none" strokeWidth="2" />
 
-                  {/* Animated Payload Dot */}
-                  <circle cx="380" cy="330" r="4" fill="#10b981" className="animate-pulse">
-                    <animateMotion dur="2s" repeatCount="indefinite" path="M -160 -105 C -80 -105, -80 0, 0 0" />
-                  </circle>
-                </svg>
+                    {/* Animated Payload Dot */}
+                    <circle cx="380" cy="330" r="4" fill="#10b981" className="animate-pulse">
+                      <animateMotion dur="2s" repeatCount="indefinite" path="M -160 -105 C -80 -105, -80 0, 0 0" />
+                    </circle>
+                  </svg>
 
-                <div className="relative z-10 w-full h-full">
-                  {/* Gateway Node */}
-                  <div className="absolute top-[225px] left-[60px] w-[160px] -translate-y-1/2 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-lg p-3 shadow-2xl">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] text-white/50">ENTRY</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+                  <div className="relative z-10 w-full h-full">
+                    {/* Gateway Node */}
+                    <div className="absolute top-[225px] left-[60px] w-[160px] -translate-y-1/2 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-lg p-3 shadow-2xl">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] text-white/50">ENTRY</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></span>
+                      </div>
+                      <div className="text-[12px] text-white font-medium">Gateway.route()</div>
+                      <div className="text-[10px] text-white/40 mt-1">45ms • HTTP 200</div>
                     </div>
-                    <div className="text-[12px] text-white font-medium">Gateway.route()</div>
-                    <div className="text-[10px] text-white/40 mt-1">45ms • HTTP 200</div>
+
+                    {/* Auth Node (Inactive path) */}
+                    <div className="absolute top-[120px] left-[380px] w-[160px] -translate-y-1/2 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/5 rounded-lg p-3 opacity-60">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] text-white/30">MIDDLEWARE</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+                      </div>
+                      <div className="text-[12px] text-white/70 font-medium">Auth.verify()</div>
+                      <div className="text-[10px] text-white/30 mt-1">cached • 2ms</div>
+                    </div>
+
+                    {/* Payment Node (Active path) */}
+                    <div className="absolute top-[330px] left-[380px] w-[160px] -translate-y-1/2 bg-[#050505] backdrop-blur-md border border-emerald-500/30 rounded-lg p-3 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] text-emerald-500/70">SERVICE</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      </div>
+                      <div className="text-[12px] text-emerald-400 font-medium">Payment.process()</div>
+                      <div className="text-[10px] text-white/40 mt-1 flex items-center gap-2">
+                        <span className="text-emerald-500/70">active</span>
+                        <span>142ms</span>
+                      </div>
+                    </div>
+
+                    {/* Stripe DB Node (Active path) */}
+                    <div className="absolute top-[330px] left-[620px] w-[140px] -translate-y-1/2 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] text-white/50">EXTERNAL</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      </div>
+                      <div className="text-[12px] text-white font-medium">Stripe API</div>
+                      <div className="text-[10px] text-white/40 mt-1">req_id: 8f92a...</div>
+                    </div>
                   </div>
 
-                  {/* Auth Node (Inactive path) */}
-                  <div className="absolute top-[120px] left-[380px] w-[160px] -translate-y-1/2 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/5 rounded-lg p-3 opacity-60">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] text-white/30">MIDDLEWARE</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-white/20"></span>
-                    </div>
-                    <div className="text-[12px] text-white/70 font-medium">Auth.verify()</div>
-                    <div className="text-[10px] text-white/30 mt-1">cached • 2ms</div>
+                  {/* Mini UI Controls */}
+                  <div className="absolute bottom-4 right-4 flex bg-black/80 border border-white/10 rounded-md p-1 backdrop-blur-md">
+                    <div className="w-6 h-6 flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-colors">+</div>
+                    <div className="w-px h-6 bg-white/10 mx-1"></div>
+                    <div className="w-6 h-6 flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-colors">-</div>
                   </div>
-
-                  {/* Payment Node (Active path) */}
-                  <div className="absolute top-[330px] left-[380px] w-[160px] -translate-y-1/2 bg-[#050505] backdrop-blur-md border border-emerald-500/30 rounded-lg p-3 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] text-emerald-500/70">SERVICE</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    </div>
-                    <div className="text-[12px] text-emerald-400 font-medium">Payment.process()</div>
-                    <div className="text-[10px] text-white/40 mt-1 flex items-center gap-2">
-                      <span className="text-emerald-500/70">active</span>
-                      <span>142ms</span>
-                    </div>
-                  </div>
-
-                  {/* Stripe DB Node (Active path) */}
-                  <div className="absolute top-[330px] left-[620px] w-[140px] -translate-y-1/2 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-lg p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] text-white/50">EXTERNAL</span>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    </div>
-                    <div className="text-[12px] text-white font-medium">Stripe API</div>
-                    <div className="text-[10px] text-white/40 mt-1">req_id: 8f92a...</div>
-                  </div>
-                </div>
-
-                {/* Mini UI Controls */}
-                <div className="absolute bottom-4 right-4 flex bg-black/80 border border-white/10 rounded-md p-1 backdrop-blur-md">
-                  <div className="w-6 h-6 flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-colors">+</div>
-                  <div className="w-px h-6 bg-white/10 mx-1"></div>
-                  <div className="w-6 h-6 flex items-center justify-center text-white/50 hover:text-white cursor-pointer transition-colors">-</div>
-                </div>
 
                   <div className="absolute top-4 left-4 flex gap-2">
                     <div className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] rounded">Live Trace</div>
@@ -322,7 +322,7 @@ export default function BentoGrid() {
                 </div>
 
                 <div className="flex-1 flex overflow-hidden">
-                  
+
                   {/* Left Sidebar (NvimTree) */}
                   <div className="w-32 hidden md:block border-r border-white/[0.05] p-2 font-mono text-[10px] bg-[#050505]">
                     <div className="text-zinc-300 flex items-center gap-1 mb-1"><span>▾</span> src</div>
@@ -342,20 +342,20 @@ export default function BentoGrid() {
                           <span>12</span><span>13</span><span>14</span><span>15</span><span>16</span>
                         </div>
                         <div className="text-zinc-300">
-                          r.<span className="text-blue-400">GET</span>(<span className="text-emerald-400">"/api/data"</span>, handlers.GetData)<br/>
-                          r.<span className="text-blue-400">POST</span>(<span className="text-emerald-400">"/api/users"</span>, handlers.CreateUser)<br/>
-                          <br/>
-                          <span className="text-zinc-500">~</span><br/>
-                          <span className="text-zinc-500">~</span><br/>
+                          r.<span className="text-blue-400">GET</span>(<span className="text-emerald-400">"/api/data"</span>, handlers.GetData)<br />
+                          r.<span className="text-blue-400">POST</span>(<span className="text-emerald-400">"/api/users"</span>, handlers.CreateUser)<br />
+                          <br />
+                          <span className="text-zinc-500">~</span><br />
+                          <span className="text-zinc-500">~</span><br />
                         </div>
                       </div>
                     </div>
 
                     {/* Terminal Pane */}
                     <div className="h-[140px] shrink-0 border-t border-white/[0.05] bg-[#0A0A0A] p-3 font-mono text-[11px] leading-relaxed">
-                      <span className="text-emerald-400">❯</span> onboard routes --framework gin<br/>
-                      <span className="text-zinc-500">Mapping endpoints...</span><br/><br/>
-                      <span className="text-emerald-400">GET</span>  /api/data  <span className="text-zinc-500">-&gt;</span> handlers.GetData<br/>
+                      <span className="text-emerald-400">❯</span> onboard routes --framework gin<br />
+                      <span className="text-zinc-500">Mapping endpoints...</span><br /><br />
+                      <span className="text-emerald-400">GET</span>  /api/data  <span className="text-zinc-500">-&gt;</span> handlers.GetData<br />
                       <span className="text-blue-400">POST</span> /api/users <span className="text-zinc-500">-&gt;</span> handlers.CreateUser
                     </div>
                   </div>
@@ -366,7 +366,7 @@ export default function BentoGrid() {
                     <div className="text-zinc-400 mb-4 leading-relaxed">
                       Found <span className="text-white">2</span> endpoints in <span className="text-emerald-400">routes.go</span>.
                     </div>
-                    
+
                     <div className="space-y-3">
                       <div className="p-2 border border-emerald-500/20 bg-emerald-500/5 rounded-md">
                         <div className="text-emerald-400 font-mono text-[10px] mb-1">GET /api/data</div>
@@ -398,7 +398,7 @@ export default function BentoGrid() {
                 </div>
 
                 <div className="flex-1 flex overflow-hidden">
-                  
+
                   {/* Left Sidebar (NvimTree) */}
                   <div className="w-32 hidden md:block border-r border-white/[0.05] p-2 font-mono text-[10px] bg-[#050505]">
                     <div className="text-zinc-300 flex items-center gap-1 mb-1"><span>▾</span> project</div>
@@ -419,20 +419,20 @@ export default function BentoGrid() {
                           <span>40</span><span>41</span><span className="text-red-400">42</span><span>43</span><span>44</span>
                         </div>
                         <div className="text-zinc-300">
-                          <span className="text-pink-400">import</span> (<br/>
-                          {'  '}<span className="text-emerald-400">"fmt"</span><br/>
-                          {'  '}<span className="text-emerald-400 bg-red-500/20">"github.com/org/db/postgres"</span> <span className="text-red-400 ml-2">← UI cannot import DB</span><br/>
-                          )<br/>
-                          <br/>
+                          <span className="text-pink-400">import</span> (<br />
+                          {'  '}<span className="text-emerald-400">"fmt"</span><br />
+                          {'  '}<span className="text-emerald-400 bg-red-500/20">"github.com/org/db/postgres"</span> <span className="text-red-400 ml-2">← UI cannot import DB</span><br />
+                          )<br />
+                          <br />
                         </div>
                       </div>
                     </div>
 
                     {/* Terminal Pane */}
                     <div className="h-[140px] shrink-0 border-t border-white/[0.05] bg-[#0A0A0A] p-3 font-mono text-[11px] leading-relaxed">
-                      <span className="text-emerald-400">❯</span> onboard drift --rules architecture.yml<br/><br/>
-                      <span className="text-red-400">❌ Violation Detected:</span><br/>
-                      <span className="text-zinc-400">[Line 42]</span> handlers.go: UI Layer cannot import Database Layer<br/>
+                      <span className="text-emerald-400">❯</span> onboard drift --rules architecture.yml<br /><br />
+                      <span className="text-red-400">❌ Violation Detected:</span><br />
+                      <span className="text-zinc-400">[Line 42]</span> handlers.go: UI Layer cannot import Database Layer<br />
                       <span className="text-zinc-500">(Rule: strict-layers)</span>
                     </div>
                   </div>
@@ -440,17 +440,17 @@ export default function BentoGrid() {
                   {/* Right Sidebar (Assistant) */}
                   <div className="w-56 hidden lg:flex flex-col bg-[#050505] p-4 text-[11px]">
                     <div className="text-zinc-200 font-medium mb-3">Dependency Graph</div>
-                    
+
                     <div className="flex-1 flex flex-col items-center justify-center gap-2">
                       <div className="px-3 py-1.5 border border-white/10 bg-[#0A0A0A] rounded text-zinc-300">
                         UI Layer
                       </div>
-                      
+
                       <div className="flex flex-col items-center">
                         <div className="w-px h-6 bg-red-500/50"></div>
                         <div className="text-red-400 text-[16px] leading-none -mt-1">×</div>
                       </div>
-                      
+
                       <div className="px-3 py-1.5 border border-red-500/30 bg-red-500/10 rounded text-red-400">
                         Database Layer
                       </div>
