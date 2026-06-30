@@ -30,11 +30,11 @@ var routesCmd = &cobra.Command{
 	Short: "Automatically map backend API routes to their handler functions",
 	Run: func(cmd *cobra.Command, args []string) {
 		var queryStr string
-		var ext string
+		var exts []string
 
 		switch strings.ToLower(framework) {
 		case "gin":
-			ext = ".go"
+			exts = []string{".go"}
 			queryStr = `
 			(call_expression
 				function: (selector_expression
@@ -47,7 +47,7 @@ var routesCmd = &cobra.Command{
 				)
 			)`
 		case "express":
-			ext = ".js"
+			exts = []string{".js", ".ts"}
 			queryStr = `
 			(call_expression
 				function: (member_expression
@@ -60,7 +60,7 @@ var routesCmd = &cobra.Command{
 				)
 			)`
 		case "fastapi":
-			ext = ".py"
+			exts = []string{".py"}
 			queryStr = `
 			(decorated_definition
 				(decorator
@@ -79,7 +79,7 @@ var routesCmd = &cobra.Command{
 				)
 			)`
 		case "spring":
-			ext = ".java"
+			exts = []string{".java"}
 			queryStr = `
 			(method_declaration
 				(modifiers
@@ -100,7 +100,7 @@ var routesCmd = &cobra.Command{
 
 		fmt.Printf("Scanning AST for %s routing patterns...\n", strings.Title(framework))
 
-		routes := executeRouteQuery(queryStr, ext)
+		routes := executeRouteQuery(queryStr, exts)
 
 		// Output clean terminal table
 		fmt.Println()
@@ -144,6 +144,15 @@ func loadOnboardIgnore() []string {
 	return ignores
 }
 
+func hasExt(exts []string, ext string) bool {
+	for _, e := range exts {
+		if e == ext {
+			return true
+		}
+	}
+	return false
+}
+
 func FastScan(path string, fw string) bool {
 	f, err := os.Open(path)
 	if err != nil {
@@ -151,7 +160,7 @@ func FastScan(path string, fw string) bool {
 	}
 	defer f.Close()
 
-	buf := make([]byte, 500)
+	buf := make([]byte, 8192)
 	n, _ := f.Read(buf)
 	if n == 0 {
 		return false
@@ -184,9 +193,9 @@ func getFileHash(path string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func executeRouteQuery(queryStr string, ext string) []RouteData {
+func executeRouteQuery(queryStr string, exts []string) []RouteData {
 	engine := parser.NewEngine()
-	lang := engine.Registry.GetLanguage("file" + ext)
+	lang := engine.Registry.GetLanguage("file" + exts[0])
 	if lang == nil {
 		fmt.Printf("Unsupported file extension for selected framework.\n")
 		os.Exit(1)
@@ -243,7 +252,7 @@ func executeRouteQuery(queryStr string, ext string) []RouteData {
 						continue
 					}
 
-					routes := parseFile(path, lang, q, ext)
+					routes := parseFile(path, lang, q)
 					if len(routes) > 0 {
 						var cRoutes []store.CachedRoute
 						for _, r := range routes {
@@ -262,7 +271,7 @@ func executeRouteQuery(queryStr string, ext string) []RouteData {
 					if !FastScan(path, framework) {
 						continue
 					}
-					routes := parseFile(path, lang, q, ext)
+					routes := parseFile(path, lang, q)
 					if len(routes) > 0 {
 						results <- routes
 					}
@@ -286,7 +295,7 @@ func executeRouteQuery(queryStr string, ext string) []RouteData {
 				return nil
 			}
 
-			if filepath.Ext(path) != ext {
+			if !hasExt(exts, filepath.Ext(path)) {
 				return nil
 			}
 
@@ -309,7 +318,7 @@ func executeRouteQuery(queryStr string, ext string) []RouteData {
 	return allRoutes
 }
 
-func parseFile(path string, lang *sitter.Language, q *sitter.Query, ext string) []RouteData {
+func parseFile(path string, lang *sitter.Language, q *sitter.Query) []RouteData {
 	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil

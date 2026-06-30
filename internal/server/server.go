@@ -1,12 +1,14 @@
 package server
 
 import (
+	"io/fs"
 	"log"
 	"net/http"
-	"path/filepath"
+	"strings"
 
 	"github.com/gorilla/websocket"
 	"github.com/onboard-cli/internal/graph"
+	"github.com/onboard-cli/ui"
 )
 
 var upgrader = websocket.Upgrader{
@@ -41,15 +43,34 @@ func (s *Server) Start() error {
 		s.serveWs(w, r)
 	})
 
-	// Serve static frontend files from ui/dist with SPA fallback
-	fs := http.FileServer(http.Dir("ui/dist"))
+	// Serve static frontend files from embedded ui/dist with SPA fallback
+	dist, err := fs.Sub(ui.Assets, "dist")
+	if err != nil {
+		log.Fatalf("Failed to load embedded UI assets: %v", err)
+	}
+	
+	fileServer := http.FileServer(http.FS(dist))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// If path doesn't have an extension, assume it's a React route and serve index.html
-		if r.URL.Path != "/" && filepath.Ext(r.URL.Path) == "" {
-			http.ServeFile(w, r, "ui/dist/index.html")
+		path := strings.TrimPrefix(r.URL.Path, "/")
+		if path == "" {
+			path = "index.html"
+		}
+		
+		// Check if file exists in the embedded FS
+		f, err := dist.Open(path)
+		if err != nil {
+			// File doesn't exist, serve index.html (SPA fallback)
+			b, err := fs.ReadFile(dist, "index.html")
+			if err != nil {
+				http.Error(w, "index.html not found", http.StatusNotFound)
+				return
+			}
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.Write(b)
 			return
 		}
-		fs.ServeHTTP(w, r)
+		f.Close()
+		fileServer.ServeHTTP(w, r)
 	})
 
 	log.Printf("Starting visualizer server on %s", s.Addr)
