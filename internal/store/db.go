@@ -42,6 +42,20 @@ func InitDB(dbPath string) (*sql.DB, error) {
 	CREATE INDEX IF NOT EXISTS idx_edges_source ON edges(source_id);
 	CREATE INDEX IF NOT EXISTS idx_edges_target ON edges(target_id);
 	CREATE INDEX IF NOT EXISTS idx_nodes_file_path ON nodes(file_path);
+
+	CREATE TABLE IF NOT EXISTS file_cache (
+		file_path TEXT PRIMARY KEY,
+		hash TEXT NOT NULL
+	);
+
+	CREATE TABLE IF NOT EXISTS cached_routes (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		file_path TEXT NOT NULL,
+		method TEXT NOT NULL,
+		path TEXT NOT NULL,
+		handler TEXT NOT NULL
+	);
+	CREATE INDEX IF NOT EXISTS idx_cached_routes_file_path ON cached_routes(file_path);
 	`
 
 	_, err = db.Exec(schema)
@@ -183,4 +197,69 @@ func GetGraph(db *sql.DB, startNodeID string, depth int) ([]DBNode, []DBEdge, er
 	}
 
 	return nodes, edges, nil
+}
+
+// CheckCache checks if the file has already been parsed and its hash hasn't changed.
+func CheckCache(db *sql.DB, path string, hash string) bool {
+	var storedHash string
+	err := db.QueryRow("SELECT hash FROM file_cache WHERE file_path = ?", path).Scan(&storedHash)
+	if err != nil {
+		return false
+	}
+	return storedHash == hash
+}
+
+// GetCachedRoutes retrieves the cached routes for a given file.
+func GetCachedRoutes(db *sql.DB, path string) ([]CachedRoute, error) {
+	rows, err := db.Query("SELECT method, path, handler FROM cached_routes WHERE file_path = ?", path)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var routes []CachedRoute
+	for rows.Next() {
+		var r CachedRoute
+		if err := rows.Scan(&r.Method, &r.Path, &r.HandlerPath); err != nil {
+			return nil, err
+		}
+		routes = append(routes, r)
+	}
+	return routes, nil
+}
+
+// UpdateCacheAndRoutes updates the file hash and replaces its cached routes.
+func UpdateCacheAndRoutes(db *sql.DB, path string, hash string, routes []CachedRoute) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Update hash
+	_, err = tx.Exec("INSERT OR REPLACE INTO file_cache (file_path, hash) VALUES (?, ?)", path, hash)
+	if err != nil {
+		return err
+	}
+
+	// Delete old routes
+	_, err = tx.Exec("DELETE FROM cached_routes WHERE file_path = ?", path)
+	if err != nil {
+		return err
+	}
+
+	// Insert new routes
+	stmt, err := tx.Prepare("INSERT INTO cached_routes (file_path, method, path, handler) VALUES (?, ?, ?, ?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	for _, r := range routes {
+		if _, err := stmt.Exec(path, r.Method, r.Path, r.HandlerPath); err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }

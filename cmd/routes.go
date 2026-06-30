@@ -1,14 +1,21 @@
 package cmd
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
+	"sync"
 	"text/tabwriter"
 
 	"github.com/onboard-cli/internal/parser"
+	"github.com/onboard-cli/internal/store"
 	sitter "github.com/smacker/go-tree-sitter"
 	"github.com/spf13/cobra"
 )
@@ -121,6 +128,62 @@ type RouteData struct {
 	HandlerPath string
 }
 
+func loadOnboardIgnore() []string {
+	content, err := os.ReadFile(".onboardignore")
+	if err != nil {
+		return []string{"node_modules", ".git", "dist"} // defaults
+	}
+	var ignores []string
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line != "" && !strings.HasPrefix(line, "#") {
+			ignores = append(ignores, line)
+		}
+	}
+	return ignores
+}
+
+func FastScan(path string, fw string) bool {
+	f, err := os.Open(path)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+
+	buf := make([]byte, 500)
+	n, _ := f.Read(buf)
+	if n == 0 {
+		return false
+	}
+	content := buf[:n]
+
+	switch strings.ToLower(fw) {
+	case "gin":
+		return bytes.Contains(content, []byte("gin")) || bytes.Contains(content, []byte("GET")) || bytes.Contains(content, []byte("POST"))
+	case "express":
+		return bytes.Contains(content, []byte("express")) || bytes.Contains(content, []byte("Router")) || bytes.Contains(content, []byte("get("))
+	case "fastapi":
+		return bytes.Contains(content, []byte("fastapi")) || bytes.Contains(content, []byte("APIRouter")) || bytes.Contains(content, []byte("@app."))
+	case "spring":
+		return bytes.Contains(content, []byte("Mapping")) || bytes.Contains(content, []byte("RestController"))
+	}
+	return true
+}
+
+func getFileHash(path string) string {
+	f, err := os.Open(path)
+	if err != nil {
+		return ""
+	}
+	defer f.Close()
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return ""
+	}
+	return hex.EncodeToString(h.Sum(nil))
+}
+
 func executeRouteQuery(queryStr string, ext string) []RouteData {
 	engine := parser.NewEngine()
 	lang := engine.Registry.GetLanguage("file" + ext)
@@ -135,71 +198,162 @@ func executeRouteQuery(queryStr string, ext string) []RouteData {
 		os.Exit(1)
 	}
 
-	var routes []RouteData
-	
-	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return nil
-		}
-		if info.IsDir() {
-			name := info.Name()
-			if name == "node_modules" || name == ".git" || name == "dist" {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		
-		if filepath.Ext(path) != ext {
-			return nil
-		}
-		
-		content, err := os.ReadFile(path)
-		if err != nil {
-			return nil
-		}
+	dbPath := filepath.Join(".onboard", "cache.db")
+	db, err := store.InitDB(dbPath)
+	if err != nil {
+		fmt.Printf("Warning: failed to initialize cache DB: %v\n", err)
+	}
+	if db != nil {
+		defer db.Close()
+	}
 
-		p := sitter.NewParser()
-		p.SetLanguage(lang)
-		tree, _ := p.ParseCtx(context.Background(), nil, content)
+	ignores := loadOnboardIgnore()
 
-		qc := sitter.NewQueryCursor()
-		qc.Exec(q, tree.RootNode())
+	jobs := make(chan string, 1000)
+	results := make(chan []RouteData, 1000)
+	var wg sync.WaitGroup
 
-		for {
-			m, ok := qc.NextMatch()
-			if !ok {
-				break
-			}
-			m = qc.FilterPredicates(m, content)
-			if len(m.Captures) == 0 {
-				continue
-			}
+	numWorkers := runtime.NumCPU()
+	for i := 0; i < numWorkers; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for path := range jobs {
+				if db != nil {
+					hash := getFileHash(path)
+					if store.CheckCache(db, path, hash) {
+						cached, _ := store.GetCachedRoutes(db, path)
+						if len(cached) > 0 {
+							var res []RouteData
+							for _, cr := range cached {
+								res = append(res, RouteData{
+									Method:      cr.Method,
+									Path:        cr.Path,
+									HandlerPath: cr.HandlerPath,
+								})
+							}
+							results <- res
+						}
+						continue
+					}
 
-			var method, rpath, handler string
-			for _, c := range m.Captures {
-				name := q.CaptureNameForId(c.Index)
-				text := c.Node.Content(content)
-				switch name {
-				case "method":
-					method = string(text)
-				case "path":
-					rpath = string(text)
-				case "handler":
-					handler = string(text)
+					// Not cached or changed, FastScan
+					if !FastScan(path, framework) {
+						store.UpdateCacheAndRoutes(db, path, hash, nil)
+						continue
+					}
+
+					routes := parseFile(path, lang, q, ext)
+					if len(routes) > 0 {
+						var cRoutes []store.CachedRoute
+						for _, r := range routes {
+							cRoutes = append(cRoutes, store.CachedRoute{
+								Method:      r.Method,
+								Path:        r.Path,
+								HandlerPath: r.HandlerPath,
+							})
+						}
+						store.UpdateCacheAndRoutes(db, path, hash, cRoutes)
+						results <- routes
+					} else {
+						store.UpdateCacheAndRoutes(db, path, hash, nil)
+					}
+				} else {
+					if !FastScan(path, framework) {
+						continue
+					}
+					routes := parseFile(path, lang, q, ext)
+					if len(routes) > 0 {
+						results <- routes
+					}
 				}
 			}
-			
-			if method != "" && rpath != "" && handler != "" {
-				routes = append(routes, RouteData{
-					Method:      method,
-					Path:        rpath,
-					HandlerPath: filepath.Base(path) + ":" + handler,
-				})
+		}()
+	}
+
+	go func() {
+		filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return nil
+			}
+			if info.IsDir() {
+				name := info.Name()
+				for _, ignore := range ignores {
+					if name == ignore {
+						return filepath.SkipDir
+					}
+				}
+				return nil
+			}
+
+			if filepath.Ext(path) != ext {
+				return nil
+			}
+
+			jobs <- path
+			return nil
+		})
+		close(jobs)
+	}()
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	var allRoutes []RouteData
+	for r := range results {
+		allRoutes = append(allRoutes, r...)
+	}
+
+	return allRoutes
+}
+
+func parseFile(path string, lang *sitter.Language, q *sitter.Query, ext string) []RouteData {
+	content, err := os.ReadFile(path)
+	if err != nil {
+		return nil
+	}
+
+	p := sitter.NewParser()
+	p.SetLanguage(lang)
+	tree, _ := p.ParseCtx(context.Background(), nil, content)
+
+	qc := sitter.NewQueryCursor()
+	qc.Exec(q, tree.RootNode())
+
+	var routes []RouteData
+	for {
+		m, ok := qc.NextMatch()
+		if !ok {
+			break
+		}
+		m = qc.FilterPredicates(m, content)
+		if len(m.Captures) == 0 {
+			continue
+		}
+
+		var method, rpath, handler string
+		for _, c := range m.Captures {
+			name := q.CaptureNameForId(c.Index)
+			text := c.Node.Content(content)
+			switch name {
+			case "method":
+				method = string(text)
+			case "path":
+				rpath = string(text)
+			case "handler":
+				handler = string(text)
 			}
 		}
-		
-		return nil
-	})
 
+		if method != "" && rpath != "" && handler != "" {
+			routes = append(routes, RouteData{
+				Method:      method,
+				Path:        rpath,
+				HandlerPath: filepath.Base(path) + ":" + handler,
+			})
+		}
+	}
 	return routes
 }

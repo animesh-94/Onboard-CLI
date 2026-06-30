@@ -15,3 +15,10 @@ type DBEdge struct {
 	TargetID         string `json:"target_id"`
 	RelationshipType string `json:"relationship_type"` // Import, Call, Inherits, Implements
 }
+
+// CachedRoute represents a route cached in SQLite
+type CachedRoute struct {
+	Method      string `json:"method"`
+	Path        string `json:"path"`
+	HandlerPath string `json:"handler_path"`
+}

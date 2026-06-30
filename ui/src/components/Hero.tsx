@@ -15,7 +15,7 @@ export default function Hero() {
     } else if (installTab === 'npm') {
       text = 'npm install -g onboard-cli';
     } else {
-      text = 'Invoke-WebRequest -Uri "https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1" -OutFile "install.ps1"; .\\install.ps1';
+      text = "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1\" -OutFile \"install.ps1\"; .\\install.ps1";
     }
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -88,7 +88,7 @@ export default function Hero() {
                   <span className="text-emerald-500 mr-2">{installTab === 'windows' ? '>' : '$'}</span>
                   {installTab === 'curl' && 'curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash'}
                   {installTab === 'npm' && 'npm install -g onboard-cli'}
-                  {installTab === 'windows' && 'Invoke-WebRequest -Uri "https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1" -OutFile "install.ps1"; .\\install.ps1'}
+                  {installTab === 'windows' && "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1\" -OutFile \"install.ps1\"; .\\install.ps1"}
                 </code>
               </div>
 

@@ -1,4 +1,5 @@
 $ErrorActionPreference = "Stop"
+$ProgressPreference = 'SilentlyContinue'
 
 $Repo = "animesh-94/Onboard-CLI"
 $BinName = "onboard.exe"
