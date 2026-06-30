@@ -356,7 +356,18 @@ func parseFile(path string, lang *sitter.Language, q *sitter.Query) []RouteData 
 			case "path":
 				rpath = string(text)
 			case "handler":
-				handler = string(text)
+				handlerStr := strings.TrimSpace(string(text))
+				if idx := strings.Index(handlerStr, "\n"); idx != -1 {
+					handlerStr = strings.TrimSpace(handlerStr[:idx])
+					if len(handlerStr) > 50 {
+						handlerStr = handlerStr[:47] + "..."
+					} else {
+						handlerStr += " ..."
+					}
+				} else if len(handlerStr) > 50 {
+					handlerStr = handlerStr[:47] + "..."
+				}
+				handler = handlerStr
 			}
 		}
 

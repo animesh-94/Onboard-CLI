@@ -12,6 +12,14 @@ var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Scans the current workspace, initializes local data cache, identifies entry points",
 	Run: func(cmd *cobra.Command, args []string) {
+		const banner = `
+   ____        __                         __
+  / __ \____  / /_  ____  ____ __________/ /
+ / / / / __ \/ __ \/ __ \/ __ ` + "`" + `/ ___/ __  /
+/ /_/ / / / / /_/ / /_/ / /_/ / /  / /_/ / 
+\____/_/ /_/_.___/\____/\__,_/_/   \__,_/  
+`
+		fmt.Println(banner)
 		fmt.Println("[INFO] Initializing Onboard-CLI in current directory...")
 
 		// 1. Create .onboard directory
