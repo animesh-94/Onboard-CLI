@@ -23,17 +23,17 @@ var mapCmd = &cobra.Command{
 		// Context engine trigger
 		fmt.Println("--- AST Slicing Engine ---")
 		eng := parser.NewEngine()
-		nodes, err := eng.Parse(target)
+		nodes, edges, err := eng.Parse(target)
 
 		topology := &graph.Topology{
 			Nodes: nodes,
-			Edges: []graph.Edge{},
+			Edges: edges,
 		}
 
 		if err != nil {
 			fmt.Printf("Parser error: %v\n", err)
 		} else {
-			fmt.Printf("Successfully parsed %d structural nodes.\n", len(nodes))
+			fmt.Printf("Successfully parsed %d structural nodes and %d edge connections.\n", len(nodes), len(edges))
 			for _, n := range nodes {
 				fmt.Printf(" - [Line %d] %s (ID: %s)\n", n.LineNum, n.Label, n.ID)
 			}

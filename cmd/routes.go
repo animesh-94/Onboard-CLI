@@ -129,16 +129,16 @@ type RouteData struct {
 }
 
 func loadOnboardIgnore() []string {
+	ignores := []string{"node_modules", ".git", "dist"} // ALWAYS include defaults
+	
 	content, err := os.ReadFile(".onboardignore")
-	if err != nil {
-		return []string{"node_modules", ".git", "dist"} // defaults
-	}
-	var ignores []string
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		if line != "" && !strings.HasPrefix(line, "#") {
-			ignores = append(ignores, line)
+	if err == nil {
+		lines := strings.Split(string(content), "\n")
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			if line != "" && !strings.HasPrefix(line, "#") {
+				ignores = append(ignores, line)
+			}
 		}
 	}
 	return ignores

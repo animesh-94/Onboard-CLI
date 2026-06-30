@@ -56,10 +56,8 @@ var interestingNodes = map[string]bool{
 
 	// ── JavaScript / TypeScript ──────────────────────────────────────
 	"function_expression":        true, // const f = function() {}
-	"arrow_function":             true, // const f = () => {}
 	"class_declaration":          true, // class Foo {}
 	"method_definition":          true, // inside class body
-	"export_statement":           true, // export default / export function
 	"lexical_declaration":        true, // const/let at top-level
 	"variable_declaration":       true, // var at top-level
 	"interface_declaration":      true, // TypeScript interface Foo {}
