@@ -107,8 +107,10 @@ func (e *Engine) Parse(target string) ([]graph.Node, []graph.Edge, error) {
 	}
 
 	parser := sitter.NewParser()
+	defer parser.Close()
 	parser.SetLanguage(lang)
 	tree, _ := parser.ParseCtx(context.Background(), nil, content)
+	defer tree.Close()
 
 	baseName := filepath.Base(target)
 	var nodes []graph.Node

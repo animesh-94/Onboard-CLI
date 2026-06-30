@@ -206,6 +206,7 @@ func executeRouteQuery(queryStr string, exts []string) []RouteData {
 		fmt.Printf("Failed to compile tree-sitter query: %v\n", err)
 		os.Exit(1)
 	}
+	defer q.Close()
 
 	dbPath := filepath.Join(".onboard", "cache.db")
 	db, err := store.InitDB(dbPath)
@@ -325,10 +326,13 @@ func parseFile(path string, lang *sitter.Language, q *sitter.Query) []RouteData 
 	}
 
 	p := sitter.NewParser()
+	defer p.Close()
 	p.SetLanguage(lang)
 	tree, _ := p.ParseCtx(context.Background(), nil, content)
+	defer tree.Close()
 
 	qc := sitter.NewQueryCursor()
+	defer qc.Close()
 	qc.Exec(q, tree.RootNode())
 
 	var routes []RouteData

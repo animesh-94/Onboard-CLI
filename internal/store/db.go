@@ -16,7 +16,7 @@ func InitDB(dbPath string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	db, err := sql.Open("sqlite3", dbPath)
+	db, err := sql.Open("sqlite3", dbPath+"?_busy_timeout=5000&_journal_mode=WAL")
 	if err != nil {
 		return nil, err
 	}
