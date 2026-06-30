@@ -129,7 +129,7 @@ type RouteData struct {
 }
 
 func loadOnboardIgnore() []string {
-	ignores := []string{"node_modules", ".git", "dist"} // ALWAYS include defaults
+	ignores := []string{"node_modules", ".git", "dist", ".next", "build", ".cache"} // ALWAYS include defaults
 	
 	content, err := os.ReadFile(".onboardignore")
 	if err == nil {
@@ -169,13 +169,13 @@ func FastScan(path string, fw string) bool {
 
 	switch strings.ToLower(fw) {
 	case "gin":
-		return bytes.Contains(content, []byte("gin")) || bytes.Contains(content, []byte("GET")) || bytes.Contains(content, []byte("POST"))
+		return bytes.Contains(content, []byte("gin")) || bytes.Contains(content, []byte("GET")) || bytes.Contains(content, []byte("POST")) || bytes.Contains(content, []byte("PUT")) || bytes.Contains(content, []byte("DELETE")) || bytes.Contains(content, []byte("PATCH")) || bytes.Contains(content, []byte("OPTIONS")) || bytes.Contains(content, []byte("HEAD")) || bytes.Contains(content, []byte("Any"))
 	case "express":
-		return bytes.Contains(content, []byte("express")) || bytes.Contains(content, []byte("Router")) || bytes.Contains(content, []byte("get("))
+		return bytes.Contains(content, []byte("express")) || bytes.Contains(content, []byte("Router")) || bytes.Contains(content, []byte("get(")) || bytes.Contains(content, []byte("post(")) || bytes.Contains(content, []byte("put(")) || bytes.Contains(content, []byte("delete(")) || bytes.Contains(content, []byte("patch(")) || bytes.Contains(content, []byte("options(")) || bytes.Contains(content, []byte("head(")) || bytes.Contains(content, []byte("all("))
 	case "fastapi":
-		return bytes.Contains(content, []byte("fastapi")) || bytes.Contains(content, []byte("APIRouter")) || bytes.Contains(content, []byte("@app."))
+		return bytes.Contains(content, []byte("fastapi")) || bytes.Contains(content, []byte("APIRouter")) || bytes.Contains(content, []byte("@app.")) || bytes.Contains(content, []byte("@router."))
 	case "spring":
-		return bytes.Contains(content, []byte("Mapping")) || bytes.Contains(content, []byte("RestController"))
+		return bytes.Contains(content, []byte("Mapping")) || bytes.Contains(content, []byte("RestController")) || bytes.Contains(content, []byte("@Controller"))
 	}
 	return true
 }

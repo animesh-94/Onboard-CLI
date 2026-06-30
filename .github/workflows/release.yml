@@ -53,7 +53,7 @@ jobs:
         env:
           CGO_ENABLED: 1
         run: |
-          go build -ldflags="-s -w" -o ${{ matrix.artifact_name }} main.go
+          go build -ldflags="-s -w -X 'github.com/onboard-cli/cmd.Version=${{ github.ref_name }}'" -o ${{ matrix.artifact_name }} main.go
 
       - name: Release
         uses: softprops/action-gh-release@v2
