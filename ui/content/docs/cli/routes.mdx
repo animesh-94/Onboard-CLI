@@ -31,13 +31,13 @@ onboard routes --protocol rest --framework gin
 [✓] Found 24 exposed endpoints.
 
 METHOD   ROUTE                  HANDLER LOCATION
-GET      /api/v1/health         src/api/health.go:12
-POST     /api/v1/order/new      src/handlers/order_handler.go:88
-GET      /api/v1/order/:id      src/handlers/order_handler.go:142
-DELETE   /api/v1/order/:id      src/handlers/order_handler.go:205
+GET      /api/v1/health         src/api/health.go:12 (healthCheck)
+POST     /api/v1/order/new      src/handlers/order_handler.go:88 (createOrder)
+GET      /api/v1/order/:id      src/handlers/order_handler.go:142 (getOrder)
+DELETE   /api/v1/order/:id      src/handlers/order_handler.go:205 (deleteOrder)
 ```
 
 ## How it Works Under the Hood
 Unlike Swagger or OpenAPI generators that rely on developers writing accurate comments or annotations, `onboard routes` reads the actual execution graph.
 
-For a Go/Gin application, the CLI executes an S-expression query against the AST to find `call_expression` nodes where the function matches `*.GET` or `*.POST`. It extracts the string literal (the route) and maps it to the referenced function pointer, guaranteeing 100% accuracy based on the compiled code.
+For a Go/Gin application, the CLI executes an S-expression query against the AST to find `call_expression` nodes where the function matches `*.GET` or `*.POST`. It extracts the string literal (the route) and maps it to the referenced function pointer (including its exact line number and signature), guaranteeing 100% accuracy based on the compiled code.

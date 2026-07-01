@@ -88,6 +88,28 @@ func InsertNodes(db *sql.DB, nodes []DBNode) error {
 	return tx.Commit()
 }
 
+// InsertEdges bulk inserts extracted edges safely within a transaction
+func InsertEdges(db *sql.DB, edges []DBEdge) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	stmt, err := tx.Prepare("INSERT OR IGNORE INTO edges (source_id, target_id, relationship_type) VALUES (?, ?, ?)")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	for _, e := range edges {
+		if _, err := stmt.Exec(e.SourceID, e.TargetID, e.RelationshipType); err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
+}
+
 // GetNeighbors recursively looks up connected nodes up to a specified depth
 func GetNeighbors(db *sql.DB, nodeID string, depth int) ([]DBNode, error) {
 	if depth <= 0 {

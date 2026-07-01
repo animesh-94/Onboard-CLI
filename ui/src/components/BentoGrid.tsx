@@ -70,7 +70,7 @@ export default function BentoGrid() {
       <div className="flex relative">
 
         {/* Sticky Sidebar */}
-        <div className="hidden lg:block w-[280px] shrink-0 border-r border-white/[0.05] py-32 sticky top-0 h-screen">
+        <div className="hidden lg:block w-[280px] shrink-0 py-32 sticky top-0 h-screen">
           <ul className="space-y-4">
             {sections.map(section => (
               <li key={section.id}>

@@ -3,8 +3,11 @@ package cmd
 import (
 	"os"
 
+	"github.com/onboard-cli/internal/version"
 	"github.com/spf13/cobra"
 )
+
+var noUpdateCheck bool
 
 var rootCmd = &cobra.Command{
 	Use:   "onboard",
@@ -13,12 +16,21 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
+	if !noUpdateCheck {
+		version.CheckVersionAsync()
+	}
+
 	err := rootCmd.Execute()
+
+	if !noUpdateCheck {
+		version.NotifyIfUpdateAvailable()
+	}
+
 	if err != nil {
 		os.Exit(1)
 	}
 }
 
 func init() {
-	// Root flags and config
+	rootCmd.PersistentFlags().BoolVar(&noUpdateCheck, "no-update-check", false, "Disable async version checking")
 }

@@ -20,6 +20,12 @@ onboard map --target <symbol_or_path> [flags]
 2. **Topology Generation**: It traverses the database to build a directed graph containing `Nodes` and `Edges`, and outputs the serialized graph to `.onboard/topology.json`.
 3. **Web Server Initialization**: It spins up an embedded React visualizer (built with `@xyflow/react`) serving on `localhost:3000`. This canvas allows you to drag, zoom, and explore the architecture visually!
 
+## UI Features
+
+- **Fuzzy Finder (Ctrl+P)**: Instantly search and jump to specific nodes in massive graphs using the interactive fuzzy finder overlay.
+- **Dark/Light Mode**: Toggle the visual theme directly from the canvas controls to match your environment.
+- **Compact Mode**: Reduce node padding and spacing to fit vast enterprise codebases onto a single screen easily.
+
 ## Essential Flags
 - `--target` (Required): The specific file, class, or function you want to act as the center of the universe. Example: `--target OrderBook::execute`.
 - `--radius <int>` (Default: 2): Controls the Context Slicer. A radius of 2 means the visualizer will only render nodes up to two dependency hops away from your target. Everything outside this radius is collapsed into a single, opaque "Macro-Node" to prevent visual clutter.

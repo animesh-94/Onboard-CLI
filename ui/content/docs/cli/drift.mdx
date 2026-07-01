@@ -53,6 +53,8 @@ exit status 1
 ### Blocking PRs in GitHub Actions
 Because `onboard drift` returns a non-zero exit code (`exit 1`) when a violation is found, it is the perfect tool to run in your CI pipeline to prevent architectural degradation.
 
+We have provided a ready-to-use GitHub Actions workflow template at [`docs/onboard-action.yml`](https://github.com/animesh-94/Onboard-CLI/blob/main/docs/onboard-action.yml). You can simply copy this into your `.github/workflows/` directory to instantly enforce boundaries on every Pull Request.
+
 ```yaml
 name: Architecture Check
 on: [pull_request]
@@ -61,9 +63,13 @@ jobs:
   lint-architecture:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
       - name: Install Onboard CLI
-        run: curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash
+        run: go install github.com/animesh-94/Onboard-CLI@latest
       - name: Run Drift Check
         run: onboard drift --ruleset architecture.yaml
 ```

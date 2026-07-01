@@ -4,7 +4,7 @@ import { ShieldCheck, TerminalSquare, Unlock } from 'lucide-react';
 
 export default function Features() {
   return (
-    <section className="bg-black relative w-full border-t border-white/[0.05] overflow-hidden min-h-[600px] flex items-center">
+    <section className="bg-black relative w-full overflow-hidden min-h-[600px] flex items-center">
       <div className="absolute inset-0 w-full h-full [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_95%,transparent)]">
         <FluidMatrix className="opacity-30" />
       </div>

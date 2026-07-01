@@ -105,7 +105,7 @@ var routesCmd = &cobra.Command{
 		// Output clean terminal table
 		fmt.Println()
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 4, ' ', 0)
-		fmt.Fprintln(w, "METHOD\tROUTE PATH\tHANDLER FUNCTION")
+		fmt.Fprintln(w, "METHOD\tROUTE PATH\tHANDLER LOCATION")
 		fmt.Fprintln(w, "------\t----------\t----------------")
 		for _, r := range routes {
 			fmt.Fprintf(w, "%s\t%s\t%s\n", r.Method, r.Path, r.HandlerPath)
@@ -347,6 +347,7 @@ func parseFile(path string, lang *sitter.Language, q *sitter.Query) []RouteData 
 		}
 
 		var method, rpath, handler string
+		var handlerLine uint32
 		for _, c := range m.Captures {
 			name := q.CaptureNameForId(c.Index)
 			text := c.Node.Content(content)
@@ -356,6 +357,7 @@ func parseFile(path string, lang *sitter.Language, q *sitter.Query) []RouteData 
 			case "path":
 				rpath = string(text)
 			case "handler":
+				handlerLine = c.Node.StartPoint().Row + 1
 				handlerStr := strings.TrimSpace(string(text))
 				if idx := strings.Index(handlerStr, "\n"); idx != -1 {
 					handlerStr = strings.TrimSpace(handlerStr[:idx])
@@ -375,7 +377,7 @@ func parseFile(path string, lang *sitter.Language, q *sitter.Query) []RouteData 
 			routes = append(routes, RouteData{
 				Method:      method,
 				Path:        rpath,
-				HandlerPath: filepath.Base(path) + ":" + handler,
+				HandlerPath: fmt.Sprintf("%s:%d (%s)", filepath.Base(path), handlerLine, handler),
 			})
 		}
 	}

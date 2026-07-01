@@ -41,29 +41,41 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/onboard-cli/install.ps1
 ## 💻 Usage
 
 ### 1. Initialize Project
-Generate the necessary `.onboard` configurations and `architecture.yml` file.
+Generate the necessary `.onboard` configurations and `architecture.yaml` file.
 ```bash
-onboard init
+onboard init --template web-api
 ```
+*(Available templates: `generic`, `web-api`, `hft`, `microservice`)*
 
 ### 2. Map the Codebase (Visualizer)
 Trigger the context engine to map a symbol or file path, and boot up the visualizer server.
 ```bash
 onboard map --target "internal/parser" --radius 2
 ```
-👉 *Click the provided link (http://localhost:3000/app) to view the interactive canvas.*
+👉 *Click the provided link (http://localhost:3000/app) to view the interactive canvas. Press `Ctrl+P` in the UI to use the Fuzzy Finder! Toggle Dark Mode and Compact Mode from the top right.*
 
-### 3. Detect Architectural Drift
+### 3. Extract Backend Routes
+Automatically map backend API routes to their exact file and line handler locations across various frameworks (Express, Gin, FastAPI, Spring).
+```bash
+onboard routes --protocol rest --framework express
+```
+
+### 4. Detect Architectural Drift
 Check for violations against your defined architecture rules.
 ```bash
 onboard drift --rules architecture.yml
 ```
 
-### 4. Additional Commands
+### 5. CI/CD Integration
+Integrate `onboard drift` into your GitHub Actions workflow to enforce architectural boundaries on every Pull Request. Check out the template at [`docs/onboard-action.yml`](docs/onboard-action.yml).
+
+### 6. Additional Commands
 - `onboard impact`: Analyze the impact of a proposed code change.
 - `onboard owners`: Track code ownership and maintainers.
 - `onboard export`: Export graphical/AST data.
 - `onboard pulse`: Get a quick summary of codebase health and recent activity.
+
+*(Note: You can pass the `--no-update-check` global flag to any command to disable the automatic async version checker).*
 
 ## 🛠️ Tech Stack
 

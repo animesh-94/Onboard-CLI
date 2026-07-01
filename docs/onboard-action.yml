@@ -1,0 +1,36 @@
+name: Architectural Drift Check
+
+on:
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  check-drift:
+    name: Enforce Architecture Boundaries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install Onboard CLI
+        run: |
+          # Fetch the latest release script (Replace with your actual install command or use go install)
+          go install github.com/animesh-94/Onboard-CLI@latest
+
+      - name: Initialize Onboard (Use strict template)
+        run: onboard init --template web-api
+        # Alternatively, if you already have onboard.yaml and architecture.yaml committed,
+        # you can skip 'init' and just rely on the repository's configuration.
+
+      - name: Run Map & Parse AST
+        run: onboard map --target ./
+
+      - name: Verify Architectural Drift
+        run: onboard drift
+        # The 'drift' command should return a non-zero exit code if forbidden dependencies 
+        # or architectural boundaries are violated, failing the PR build automatically.

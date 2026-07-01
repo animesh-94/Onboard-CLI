@@ -4,28 +4,39 @@ description: "Initialize the AST intelligence graph and scaffold your project wo
 order: 2
 ---
 
-Before Onboard-CLI can analyze, visualize, or lint your architecture, it must build a local intelligence graph. The `init` command handles the scaffolding of the `.onboard` directory and sets up the base `onboard.yaml` configuration file for your project.
+Before Onboard-CLI can analyze, visualize, or lint your architecture, it must build a local intelligence graph. The `init` command handles the scaffolding of the `.onboard` directory and sets up the base `onboard.yaml` and `architecture.yaml` configuration files for your project.
 
 ## Usage
 
 ```bash
-onboard init
+onboard init --template web-api
 ```
+
+### Options
+
+- `--template [name]`: Specifies the `architecture.yaml` template to scaffold. Available templates are `generic` (default), `web-api`, `hft` (High Frequency Trading), and `microservice`.
 
 ## What happens under the hood?
 
 When you run `onboard init`, the CLI performs the following actions:
 
 1. **Scaffolds Directories**: It creates a hidden `.onboard` directory in the root of your project. This directory will act as the home for your local SQLite graph cache, topology dumps, and rulesets.
-2. **Generates Config**: It drops a base `onboard.yaml` file into your project. This file is where you can configure specific settings for the CLI (e.g., ignoring specific legacy directories, configuring custom framework extensions, etc.).
+2. **Generates Configs**: It drops a base `onboard.yaml` file (for CLI config like ignored dirs) and an `architecture.yaml` file (pre-populated based on the selected template) into your project.
 3. **Prepares for Mapping**: The `.onboard/cache.db` file is provisioned and the SQLite tables and indexes are initialized, preparing the engine for the `map`, `drift`, and `export` commands.
 
 ## Example Output
 
 ```plaintext
+   ____        __                         __
+  / __ \____  / /_  ____  ____ __________/ /
+ / / / / __ \/ __ \/ __ \/ __ `/ ___/ __  /
+/ /_/ / / / / /_/ / /_/ / /_/ / /  / /_/ / 
+\____/_/ /_/_.___/\____/\__,_/_/   \__,_/  
+
 [INFO] Initializing Onboard-CLI in current directory...
 [OK] Created .onboard directory structure.
 [OK] Generated onboard.yaml default configuration.
+[OK] Generated architecture.yaml using 'web-api' template.
 [OK] Initialized cache.db SQLite schema.
 
 Initialization complete! Run 'onboard map' to start building your AST graph.
