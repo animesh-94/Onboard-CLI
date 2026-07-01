@@ -1,41 +1,46 @@
 ---
 title: "Context Owner Engine (owners)"
-description: "Dynamically calculate real code owners by crossing git history with AST density."
-order: 6
+description: "Calculate which team members own the highest percentage of any given module."
+order: 3
 ---
 
-Stop guessing who to tag for a PR review. The `onboard owners` command bypasses superficial `git blame` logs by cross-referencing deep commit history with actual Code volume.
+Bypass superficial `git blame` logs. The **Context Owner Engine** cross-references deep commit history with AST node density to find the true architect of any codebase segment. 
 
-It identifies the true architects of a module by determining who wrote the most lines of active, executing code currently present in the file.
+Whether you are looking at a localized memory allocator or a distributed scheduling service, `onboard owners` cuts through legacy noise to instantly identify the engineer who actually understands the active business logic.
 
 ## Usage
 
 ```bash
-onboard owners --target <filepath_or_directory>
+onboard owners --target <file_path_or_directory>
 ```
 
 ## How It Works
 
-Traditional code ownership relies on manual `CODEOWNERS` files, which go stale incredibly fast in rapidly moving startups. 
+Traditional blame features tell you who last touched a line of code (often someone who just ran an auto-formatter or updated an import). 
 
-`onboard owners` runs an instantaneous `git blame` aggregation against the requested target. It parses every single line of code in the file, checks the git history to see who authored that specific line, and then aggregates the total line counts to generate a percentage-based ownership breakdown.
+Onboard CLI solves this by reading the Abstract Syntax Tree (AST) to measure the **cognitive weight** of the code, and then tying it to git history:
+
+1. **AST Density Mapping:** It assigns weight to code blocks based on logic complexity (e.g. nested loops, complex conditionals, and heavy algorithms get more weight than simple variable declarations).
+2. **Git History Correlation:** It correlates these weighted blocks back through the git tree to find the original authors of the core logic.
+3. **Primary Architect Identification:** It aggregates the results and tells you exactly who the Primary context owner is, saving you hours of guessing who to tag for a PR review.
 
 ## Example Output
 
 ```bash
-onboard owners --target src/engine/scheduler.go
+onboard owners --target src/auth
 ```
 
 **Terminal Output:**
 ```plaintext
-[INFO] Analyzing git history for src/engine/scheduler.go...
+$ onboard owners --target src/auth
+Analyzing git history & AST dependencies...
+Success! Context mapped.
 
-👑 Code Owners (by active line count):
-1. Alice Smith (alice@startup.com) - 64% (412 lines)
-2. Bob Jones (bob@startup.com) - 21% (135 lines)
-3. Charlie Brown (charlie@startup.com) - 15% (98 lines)
+Based on AST density and git history, here are the true architects of src/auth:
 
-Primary Owner: Alice Smith
+1. @sarah_dev (Primary)
+   68% logic • 42 commits
+
+2. @mike_eng
+   22% logic • 15 commits
 ```
-
-You now know exactly who to talk to when making a complex refactor!

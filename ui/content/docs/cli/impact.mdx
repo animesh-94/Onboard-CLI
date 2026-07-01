@@ -1,38 +1,42 @@
 ---
 title: "Blast Radius Analyzer (impact)"
 description: "Evaluate the downstream impact of proposed code changes before deploying."
-order: 7
+order: 4
 ---
 
-Never break production blindly. Standard IDE tools show you what a file *imports*. `onboard impact` performs a **Reverse-Dependency Traversal** to show you what imports *your* file.
+Never break production blindly. Standard IDE tools show you what a file *imports*. `onboard impact` performs a **Reverse-Dependency Traversal** (traversing the reverse AST call-graph) to show you exactly what imports *your* file.
 
-It calculates the Blast Radius of a proposed refactor, allowing you to see exactly which downstream services, controllers, or modules will be affected if you alter a core piece of logic.
+Before you commit a refactor in your core module, you need to know exactly which external microservices will fail. This tool maps the exact architectural blast radius of a specific function signature, highlighting vulnerable downstream consumers right in your terminal before your CI/CD pipeline even boots up.
 
 ## Usage
 
 ```bash
+onboard impact --branch <branch_name>
+# or
 onboard impact --target <file_path>
 ```
 
 ## How It Works
 
-`onboard impact` leverages the internal SQLite graph cache built by the `init` command. It takes your target file, runs a reverse-lookup query on the `edges` table, and recursively maps all nodes that have a directed edge pointing *towards* your target.
+`onboard impact` leverages the internal SQLite graph cache built by the CLI. It takes your target file or current git branch diff, runs a reverse-lookup query on the `edges` table, and recursively maps all nodes that have a directed edge pointing *towards* your target.
 
-It then calculates a "Blast Radius Score". A high score means the file is a deeply embedded core dependency (like a database connector or an authentication middleware). A low score means the file is likely a leaf node (like a specific API route or a UI component).
+It then calculates a "Blast Radius Score":
+* **High Score:** The code is a deeply embedded core dependency (like a database connector or an authentication middleware). Exercise extreme caution.
+* **Low Score:** The code is likely a leaf node (like a specific API route or an isolated UI component). Safe to modify.
 
 ## Example Output
 
 ```bash
-onboard impact --target pkg/auth/middleware.go
+onboard impact --branch feat/auth-refactor
 ```
 
 **Terminal Output:**
 ```plaintext
-[INFO] Analyzing blast radius for: pkg/auth/middleware.go
+[INFO] Analyzing blast radius for changes in: feat/auth-refactor
 
 ⚠️  HIGH IMPACT DETECTED ⚠️
 
-Blast Radius: 42 files depend on this module.
+Blast Radius: 42 files depend on these modules.
 Direct Dependencies:
  - cmd/api/server.go
  - pkg/routes/users.go
@@ -40,5 +44,5 @@ Direct Dependencies:
  - pkg/routes/payments.go
 ... (and 38 more)
 
-Recommendation: Exercise extreme caution. Changes to this file require extensive integration testing.
+Recommendation: Exercise extreme caution. Changes require extensive integration testing.
 ```

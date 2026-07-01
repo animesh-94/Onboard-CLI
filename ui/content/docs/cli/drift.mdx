@@ -1,7 +1,7 @@
 ---
 title: "Architecture Linter (drift)"
 description: "Enforce strict architectural boundaries and catch spaghetti code before it gets merged."
-order: 5
+order: 7
 ---
 
 Documentation decays; code is reality. `onboard drift` uses the static AST graph to find architectural violations that standard text-based linters miss, ensuring your intended system design matches the actual execution path.
@@ -9,8 +9,12 @@ Documentation decays; code is reality. `onboard drift` uses the static AST graph
 ## Usage
 
 ```bash
-onboard drift --ruleset <path_to_yaml>
+onboard drift --ruleset architecture.yaml
 ```
+
+## The arch-checkpoint Node
+
+As seen in the visual mapper, the `arch-checkpoint` acts as the final gatekeeper in your CI/CD pipeline. When an architectural rule is violated (e.g., a controller directly importing a database repository), the pipeline is **halted and reverted**, ensuring the deployment stays on the last known stable and compliant version.
 
 ### The Ruleset File (architecture.yaml)
 To enforce boundaries, you must define them. Create a YAML file in your repository root defining your system's layers and the import restrictions between them.
@@ -36,10 +40,6 @@ rules:
 ### Output & CI/CD Integration
 When you run `onboard drift`, the CLI traverses the AST and cross-references all cross-file imports against your YAML ruleset.
 
-```bash
-onboard drift --ruleset architecture.yaml
-```
-
 **Terminal Output:**
 ```plaintext
 Analyzing drift using ruleset: architecture.yaml
@@ -49,6 +49,15 @@ Analyzing drift using ruleset: architecture.yaml
  - [Line 18] src/domain/user_service.go: domain_layer cannot import api_layer (Rule broken: Domain logic must be framework-agnostic. Do not import HTTP handlers.)
 exit status 1
 ```
+
+### Local Prevention (Git Pre-Commit Hooks)
+You don't have to wait for CI/CD to tell you that you broke the architecture. You can catch violations locally before the commit even happens.
+
+```bash
+onboard hooks install
+```
+
+This command installs a git `pre-commit` hook that automatically runs `onboard drift` on your staged files. If an architectural rule is violated, the commit is aborted, allowing you to fix the issue immediately without clogging up your pull requests with failed checks.
 
 ### Blocking PRs in GitHub Actions
 Because `onboard drift` returns a non-zero exit code (`exit 1`) when a violation is found, it is the perfect tool to run in your CI pipeline to prevent architectural degradation.
@@ -70,6 +79,6 @@ jobs:
           go-version: '1.22'
       - name: Install Onboard CLI
         run: go install github.com/animesh-94/Onboard-CLI@latest
-      - name: Run Drift Check
+      - name: Run arch-checkpoint
         run: onboard drift --ruleset architecture.yaml
 ```

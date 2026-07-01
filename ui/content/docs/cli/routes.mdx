@@ -1,7 +1,7 @@
 ---
-title: "API Endpoint Mapper (routes)"
+title: "Entry Point Mapper (routes)"
 description: "Automatically map backend API routes to their handler functions across multiple frameworks."
-order: 4
+order: 6
 ---
 
 Finding where a request actually enters a distributed backend often requires tracing through opaque layers of middleware, interceptors, and boilerplate. 
@@ -18,7 +18,7 @@ onboard routes --protocol <type> --framework <name>
 * **`--protocol` (string):** The type of communication protocol. Valid options: `rest`, `grpc`, `graphql`.
 * **`--framework` (string):** The specific routing framework to parse. Valid options: `gin` (Go), `spring` (Java), `express` (Node.js), `fastapi` (Python).
 
-### Example: Parsing a Go/Gin API
+## Example: Parsing a Go/Gin API
 If you drop into a massive Go microservice, you can instantly map its perimeter:
 
 ```bash
