@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ArchitectureDiagram from '../components/ArchitectureDiagram';
 import { useParams } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 
 export default function Blog() {
   const { id } = useParams();
@@ -9,6 +10,7 @@ export default function Blog() {
   if (id === '2') {
     return (
       <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+        <SEO title="Building the Graph Abstraction Engine - Onboard CLI Blog" description="When we set out to build Onboard-CLI, we knew standard text-based analysis tools wouldn't cut it." />
         <Navbar />
         <main className="flex-1 max-w-[720px] mx-auto px-6 py-24 w-full">
           <article className="prose-lg font-serif">
@@ -47,7 +49,7 @@ export default function Blog() {
               <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
                 The Challenges (and Triumphs)
               </h2>
-              
+
               <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
                 1. CGO Cross-Compilation Hell
               </h3>
@@ -59,7 +61,7 @@ export default function Blog() {
                 2. The AST Memory Bottleneck
               </h3>
               <p>
-                Initially, we attempted to map the entire architecture in Go's memory. When pointing the CLI at a large enterprise codebase, RAM consumption spiked to over 4GB in seconds, crashing the OS memory limits. 
+                Initially, we attempted to map the entire architecture in Go's memory. When pointing the CLI at a large enterprise codebase, RAM consumption spiked to over 4GB in seconds, crashing the OS memory limits.
               </p>
               <p>
                 <strong>The Solution:</strong> We dumped the memory approach entirely. As the AST parses, it uses a streaming logic to calculate deterministic SHA-256 hashes of nodes (based on file paths and line numbers) and instantly flushes them into the SQLite database. Memory overhead stays at a flat ~40MB, regardless of repo size.
@@ -69,7 +71,7 @@ export default function Blog() {
                 3. The Traversal Speed Limit
               </h3>
               <p>
-                With 50,000 nodes and 200,000 edges living in SQLite, running standard SQL <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">JOINs</code> to find the "Blast Radius" or "Dependencies" of a specific function took upwards of 15 seconds. 
+                With 50,000 nodes and 200,000 edges living in SQLite, running standard SQL <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">JOINs</code> to find the "Blast Radius" or "Dependencies" of a specific function took upwards of 15 seconds.
               </p>
               <p>
                 <strong>The Solution:</strong> We implemented highly optimized <strong>Recursive Common Table Expressions (CTEs)</strong>. Using <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">WITH RECURSIVE bfs(...)</code>, we forced the SQLite engine—which is highly optimized in C—to perform the breadth-first search natively. What used to take 15 seconds now takes less than 80 milliseconds.
@@ -92,6 +94,7 @@ export default function Blog() {
   // Fallback to Blog 1 for any other ID
   return (
     <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+      <SEO title="The Architecture of Onboard-CLI - Blog" description="To build Onboard-CLI as a production-grade systems tool, you need an architecture that balances the heavy-lifting of native code analysis with a lightning-fast user experience." />
       <Navbar />
 
       <main className="flex-1 max-w-[720px] mx-auto px-6 py-24 w-full">
@@ -108,7 +111,7 @@ export default function Blog() {
                 <span>Animesh Yadav</span>
               </div>
               <span>•</span>
-              <span>June 29, 2026</span>
+              <span>June 18, 2026</span>
             </div>
           </header>
 
@@ -166,7 +169,7 @@ export default function Blog() {
             <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
               3. High-Level Architecture Graph
             </h2>
-            
+
             <div className="mb-10 mt-6">
               <ArchitectureDiagram />
             </div>

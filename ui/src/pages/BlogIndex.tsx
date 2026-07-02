@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { SEO } from '../components/SEO';
 
 const BLOG_POSTS = [
   {
@@ -9,7 +10,7 @@ const BLOG_POSTS = [
     title: 'Building the Graph Abstraction Engine: Recursive SQL and Tree-Sitter',
     preview: 'When we set out to build Onboard-CLI, we knew standard text-based analysis tools (like grep or simple regex scripts) wouldn\'t cut it. Developers need to know exactly how a system connects at a topological level...',
     date: '2026-06-29',
-    time: '20:15 EST',
+    time: '20:15 IST',
     author: 'Animesh Yadav',
     timestamp: 1782764100000 // A UNIX timestamp for sorting
   },
@@ -18,8 +19,8 @@ const BLOG_POSTS = [
     number: 1,
     title: 'The Architecture of Onboard-CLI: Built for Speed and Security',
     preview: 'To build Onboard-CLI as a production-grade systems tool, you need an architecture that balances the heavy-lifting of native code analysis with a lightning-fast user experience...',
-    date: '2026-06-25',
-    time: '14:30 EST',
+    date: '2026-06-18',
+    time: '14:30 IST',
     author: 'Animesh Yadav',
     timestamp: 1782743400000 // A UNIX timestamp for sorting
   }
@@ -31,6 +32,7 @@ export default function BlogIndex() {
 
   return (
     <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+      <SEO title="Engineering Blog - Onboard CLI" description="Read our latest engineering posts about building Onboard CLI." />
       <Navbar />
 
       <main className="flex-1 max-w-[800px] mx-auto px-6 py-24 w-full">

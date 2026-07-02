@@ -4,6 +4,7 @@ import Landing from './pages/Landing';
 import DocsLayout from './pages/Docs';
 import BlogIndex from './pages/BlogIndex';
 import BlogPost from './pages/BlogPost';
+import Changelog from './pages/Changelog';
 import { Analytics } from "@vercel/analytics/react"
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/changelog" element={<Changelog />} />
         <Route path="/app" element={<Canvas />} />
         <Route path="/docs" element={<Navigate to="/docs/getting-started" replace />} />
         <Route path="/docs/:slug" element={<DocsLayout />} />

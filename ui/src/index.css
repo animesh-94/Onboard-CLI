@@ -58,10 +58,63 @@
   --muted-foreground: oklch(60% 0 0);
   --accent: oklch(20% 0 0);
   --accent-foreground: oklch(100% 0 0);
-  --destructive: oklch(40% 0.1 20);
-  --destructive-foreground: oklch(90% 0.1 20);
+  --destructive: oklch(50% 0.2 0);
+  --destructive-foreground: oklch(100% 0 0);
   --border: oklch(20% 0 0);
   --input: oklch(20% 0 0);
-  --ring: oklch(100% 0 0);
+  --ring: oklch(40% 0 0);
   --radius: 0.5rem;
+}
+
+@layer utilities {
+  /* rehype-pretty-code syntax highlighting styles */
+  .prose pre {
+    @apply rounded-xl border border-white/10 bg-[#0d0d0d] p-0 my-6;
+  }
+  
+  .prose code {
+    @apply bg-white/10 px-1.5 py-0.5 rounded text-[13px] font-mono font-medium before:content-none after:content-none;
+  }
+
+  .prose pre code {
+    @apply bg-transparent px-0 py-0 block min-w-full leading-loose;
+  }
+
+  .prose pre > code {
+    counter-reset: line;
+  }
+
+  [data-rehype-pretty-code-figure] {
+    @apply overflow-hidden rounded-xl bg-[#0d0d0d];
+  }
+
+  [data-rehype-pretty-code-figure] > pre {
+    @apply overflow-x-auto py-4 bg-transparent border-none m-0;
+  }
+
+  [data-rehype-pretty-code-title] {
+    @apply px-4 py-3 text-sm font-medium text-white/70 border-b border-white/10 bg-[#151515] font-mono;
+  }
+
+  code[data-line-numbers] {
+    counter-reset: line;
+  }
+
+  code[data-line-numbers] > [data-line]::before {
+    counter-increment: line;
+    content: counter(line);
+    @apply inline-block w-4 mr-4 text-right text-white/30;
+  }
+
+  [data-line] {
+    @apply px-4 border-l-2 border-transparent;
+  }
+
+  [data-highlighted-line] {
+    @apply bg-white/[0.05] border-emerald-500;
+  }
+
+  [data-highlighted-chars] {
+    @apply bg-emerald-500/20 rounded-md;
+  }
 }

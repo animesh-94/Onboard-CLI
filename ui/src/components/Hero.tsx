@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { FluidMatrix } from '@/components/ui/fluid-matrix';
 import { Copy, Check } from 'lucide-react';
 
 export default function Hero() {
-  const [installTab, setInstallTab] = useState<'curl' | 'npm' | 'windows'>('curl');
+  const [installTab, setInstallTab] = useState<'curl' | 'go' | 'windows'>('curl');
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     let text = '';
     if (installTab === 'curl') {
       text = 'curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash';
-    } else if (installTab === 'npm') {
-      text = 'npm install -g onboard-cli';
+    } else if (installTab === 'go') {
+      text = 'go install github.com/animesh-94/Onboard-CLI@latest';
     } else {
       text = "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1\" -OutFile \"install.ps1\"; .\\install.ps1";
     }
@@ -25,7 +26,7 @@ export default function Hero() {
   const logos = [
     { name: 'AST Context Slicing', desc: 'Navigate massive monorepos instantly. Dynamically prune noise and collapse out-of-scope directories into abstracted macro-nodes using native Tree-sitter parsing.' },
     { name: 'Visual Execution Canvas', desc: 'Launch a local, high-fidelity node editor directly from your terminal. Trace data flows and thread concurrency across microservices in a fully interactive map.' },
-    { name: 'Blast Radius Analysis', tag: 'EARLY ACCESS', desc: 'Never break production. Run onboard impact to generate a complete reverse-dependency tree, showing exactly what remote services your local changes will affect.' },
+    { name: 'Blast Radius Analysis', desc: 'Never break production. Run onboard impact to generate a complete reverse-dependency tree, showing exactly what remote services your local changes will affect.' },
     { name: 'Gamified Sandbox Evaluator', desc: 'Turn onboarding into an active challenge. Isolate specific repository modules and evaluate new developer code against hidden test cases in secure, containerized environments.' },
   ];
 
@@ -74,10 +75,10 @@ export default function Hero() {
                 Windows (PowerShell)
               </button>
               <button
-                onClick={() => setInstallTab('npm')}
-                className={`px-5 py-3 text-[13px] font-medium transition-colors border-b-2 ${installTab === 'npm' ? 'border-emerald-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
+                onClick={() => setInstallTab('go')}
+                className={`px-5 py-3 text-[13px] font-medium transition-colors border-b-2 ${installTab === 'go' ? 'border-emerald-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
               >
-                NPM Package
+                Go Toolchain
               </button>
             </div>
 
@@ -87,7 +88,7 @@ export default function Hero() {
                 <code className="font-mono text-[14px] text-white/80 pr-4">
                   <span className="text-emerald-500 mr-2">{installTab === 'windows' ? '>' : '$'}</span>
                   {installTab === 'curl' && 'curl -sL https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.sh | bash'}
-                  {installTab === 'npm' && 'npm install -g onboard-cli'}
+                  {installTab === 'go' && 'go install github.com/animesh-94/Onboard-CLI@latest'}
                   {installTab === 'windows' && "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri \"https://raw.githubusercontent.com/animesh-94/Onboard-CLI/main/install.ps1\" -OutFile \"install.ps1\"; .\\install.ps1"}
                 </code>
               </div>
@@ -103,12 +104,19 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            {/* <Button variant="secondary" className="rounded-full px-6 py-6 text-[15px] font-semibold bg-white text-black hover:bg-zinc-200">
-              Get started
-            </Button>
-            <Button variant="outline" className="rounded-full px-6 py-6 text-[15px] font-semibold bg-transparent border-white/20 text-white hover:bg-white/10">
+            <Link
+              to="/app"
+              className="flex items-center gap-2 rounded-full px-6 py-3 text-[15px] font-semibold text-white/90 hover:text-white bg-white/[0.05] border border-white/10 backdrop-blur-2xl hover:bg-white/[0.08] transition-all shadow-xl"
+            >
+              Try Visual Map Demo
+            </Link>
+
+            {/* <Link 
+              to="/docs"
+              className="rounded-full px-6 py-3 text-[15px] font-semibold bg-transparent border border-white/20 text-white hover:bg-white/10 transition-colors"
+            >
               Read the docs
-            </Button> */}
+            </Link> */}
           </div>
         </motion.div>
       </div>
@@ -124,11 +132,6 @@ export default function Hero() {
                   <path d="M7 7h.01" />
                 </svg>
                 <h3 className="text-[15px] font-bold text-white tracking-tight">{feature.name}</h3>
-                {feature.tag && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 ml-1">
-                    {feature.tag}
-                  </span>
-                )}
               </div>
               <p className="text-[14px] text-white/50 leading-relaxed font-medium">
                 {feature.desc}

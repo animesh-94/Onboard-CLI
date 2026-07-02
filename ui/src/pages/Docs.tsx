@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
+import { SEO } from '@/components/SEO';
 
 // Load all MDX modules at build time
 const mdxModules = import.meta.glob('/content/docs/**/*.mdx', { eager: true });
@@ -49,6 +50,7 @@ export default function DocsLayout() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-400 font-sans selection:bg-emerald-500/30">
+      <SEO title={`${currentDoc.title} - Onboard CLI Docs`} description={currentDoc.description} />
       <Navbar />
 
       <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row gap-12 pt-8 pb-24">
