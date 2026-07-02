@@ -11,14 +11,12 @@ Before you commit a refactor in your core module, you need to know exactly which
 ## Usage
 
 ```bash
-onboard impact --branch <branch_name>
-# or
-onboard impact --target <file_path>
+onboard impact --target <file_path_or_signature>
 ```
 
 ## How It Works
 
-`onboard impact` leverages the internal SQLite graph cache built by the CLI. It takes your target file or current git branch diff, runs a reverse-lookup query on the `edges` table, and recursively maps all nodes that have a directed edge pointing *towards* your target.
+`onboard impact` leverages the internal SQLite graph cache built by the CLI. It takes your target file or function signature, runs a reverse-lookup query on the `edges` table, and recursively maps all nodes that have a directed edge pointing *towards* your target.
 
 It then calculates a "Blast Radius Score":
 * **High Score:** The code is a deeply embedded core dependency (like a database connector or an authentication middleware). Exercise extreme caution.
@@ -27,12 +25,12 @@ It then calculates a "Blast Radius Score":
 ## Example Output
 
 ```bash
-onboard impact --branch feat/auth-refactor
+onboard impact --target internal/auth/login.go
 ```
 
 **Terminal Output:**
 ```plaintext
-[INFO] Analyzing blast radius for changes in: feat/auth-refactor
+[INFO] Analyzing blast radius for changes in: internal/auth/login.go
 
 ⚠️  HIGH IMPACT DETECTED ⚠️
 

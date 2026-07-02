@@ -68,16 +68,17 @@
 
 @layer utilities {
   /* rehype-pretty-code syntax highlighting styles */
+  /* rehype-pretty-code syntax highlighting styles */
   .prose pre {
-    @apply rounded-xl border border-white/10 bg-[#0d0d0d] p-0 my-6;
+    @apply bg-transparent border-none m-0 p-0;
   }
   
   .prose code {
-    @apply bg-white/10 px-1.5 py-0.5 rounded text-[13px] font-mono font-medium before:content-none after:content-none;
+    @apply bg-white/10 text-emerald-300 px-1.5 py-0.5 rounded text-[13px] font-mono font-medium before:content-none after:content-none;
   }
 
   .prose pre code {
-    @apply bg-transparent px-0 py-0 block min-w-full leading-loose;
+    @apply bg-transparent text-zinc-300 px-0 py-0 block min-w-full leading-loose;
   }
 
   .prose pre > code {
@@ -85,15 +86,15 @@
   }
 
   [data-rehype-pretty-code-figure] {
-    @apply overflow-hidden rounded-xl bg-[#0d0d0d];
+    @apply m-0 p-0;
   }
 
-  [data-rehype-pretty-code-figure] > pre {
-    @apply overflow-x-auto py-4 bg-transparent border-none m-0;
+  [data-rehype-pretty-code-figure] pre {
+    @apply m-0 p-0;
   }
 
   [data-rehype-pretty-code-title] {
-    @apply px-4 py-3 text-sm font-medium text-white/70 border-b border-white/10 bg-[#151515] font-mono;
+    @apply px-5 py-3 text-sm font-medium text-white/70 border-b border-white/10 bg-[#151515] font-mono;
   }
 
   code[data-line-numbers] {
@@ -107,7 +108,7 @@
   }
 
   [data-line] {
-    @apply px-4 border-l-2 border-transparent;
+    @apply px-0 border-l-2 border-transparent;
   }
 
   [data-highlighted-line] {

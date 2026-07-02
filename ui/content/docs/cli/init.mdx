@@ -9,12 +9,16 @@ Before Onboard-CLI can analyze, visualize, or lint your architecture, it must bu
 ## Usage
 
 ```bash
-onboard init --template web-api
+# Normal Initialization
+onboard init
+
+# CI/CD Initialization with Specific Template
+onboard init --template clean-architecture
 ```
 
 ### Options
 
-- `--template [name]`: Specifies the `architecture.yaml` template to scaffold. Available templates are `generic` (default), `web-api`, `hft` (High Frequency Trading), and `microservice`.
+- `--template [name]`: Specifies the `architecture.yaml` template to scaffold. Available templates are `generic` (default), `clean-architecture`, `modular-monolith`, `mvc`, and `serverless`.
 
 ## What happens under the hood?
 
@@ -36,7 +40,7 @@ When you run `onboard init`, the CLI performs the following actions:
 [INFO] Initializing Onboard-CLI in current directory...
 [OK] Created .onboard directory structure.
 [OK] Generated onboard.yaml default configuration.
-[OK] Generated architecture.yaml using 'web-api' template.
+[OK] Generated architecture.yaml using 'clean-architecture' template.
 [OK] Initialized cache.db SQLite schema.
 
 Initialization complete! Run 'onboard map' to start building your AST graph.

@@ -392,7 +392,7 @@ export default function BentoGrid() {
 
                       {/* Terminal Pane */}
                       <div className="h-[140px] shrink-0 border-t border-white/[0.05] bg-[#0A0A0A] p-3 font-mono text-[11px] leading-relaxed">
-                        <span className="text-emerald-400">❯</span> onboard routes --framework gin<br />
+                        <span className="text-emerald-400">❯</span> onboard routes --protocol rest --framework gin<br />
                         <span className="text-zinc-500">Mapping endpoints...</span><br /><br />
                         <span className="text-emerald-400">GET</span>  /api/data  <span className="text-zinc-500">-&gt;</span> handlers.GetData<br />
                         <span className="text-blue-400">POST</span> /api/users <span className="text-zinc-500">-&gt;</span> handlers.CreateUser

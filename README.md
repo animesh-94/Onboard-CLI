@@ -43,9 +43,9 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/onboard-cli/install.ps1
 ### 1. Initialize Project
 Generate the necessary `.onboard` configurations and `architecture.yaml` file.
 ```bash
-onboard init --template web-api
+onboard init --template clean-architecture
 ```
-*(Available templates: `generic`, `web-api`, `hft`, `microservice`)*
+*(Available templates: `generic`, `clean-architecture`, `modular-monolith`, `mvc`, `serverless`)*
 
 ### 2. Map the Codebase (Visualizer)
 Trigger the context engine to map a symbol or file path, and boot up the visualizer server.

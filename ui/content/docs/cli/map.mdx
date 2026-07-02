@@ -11,7 +11,11 @@ The **Visual Mapper** (`onboard map`) reads your local SQLite database of AST de
 ## Usage
 
 ```bash
-onboard map --serve --port 3000
+# Map an entire directory
+onboard map --target src --radius 2
+
+# Map a specific file
+onboard map --target src/main.go --radius 1
 ```
 
 ## How It Works
@@ -25,7 +29,13 @@ onboard map --serve --port 3000
 If you don't want to use the built-in React visualizer, Onboard CLI's open architecture allows you to export the graph to standard JSON formats, meaning no vendor lock-in. 
 
 ```bash
-onboard map --export graph.json
+onboard export --format json --output graph.json
 ```
+
+### Export Options
+- `--format`: Output format (`mermaid`, `dot`, `json`, `png`). Default is `json`.
+- `--output`: Output file path. Default is `stdout`.
+- `--depth`: Depth for BFS traversal (`0` for full graph).
+- `--node`: Starting node ID for BFS traversal.
 
 You can then import this `graph.json` into tools like Gephi, D3.js, or Cytoscape.
