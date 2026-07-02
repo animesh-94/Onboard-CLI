@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
@@ -9,6 +9,18 @@ export default function Navbar() {
   const location = useLocation();
   const path = location.pathname;
   const [isOpen, setIsOpen] = useState(false);
+  const [stars, setStars] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/animesh-94/Onboard-CLI')
+      .then(res => res.json())
+      .then(data => {
+        if (data.stargazers_count !== undefined) {
+          setStars(data.stargazers_count);
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <motion.nav
@@ -83,9 +95,14 @@ export default function Navbar() {
             href="https://github.com/animesh-94/Onboard-CLI"
             target="_blank"
             rel="noreferrer"
-            className="text-white/60 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 bg-[#1A1A1A]/30 backdrop-blur-xl hover:bg-[#1A1A1A]/80 border border-white/10 rounded-lg text-white/60 hover:text-white transition-all"
           >
-            <Github size={20} />
+            <Github size={16} />
+            {stars !== null && (
+              <span className="text-[13px] font-medium border-l border-white/10 pl-2 ml-1">
+                {stars.toLocaleString()}
+              </span>
+            )}
           </a>
         </div>
 
