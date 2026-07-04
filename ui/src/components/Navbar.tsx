@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X, Search, Star } from 'lucide-react';
 import { Github } from './GithubIcon';
 import CommandPalette from './CommandPalette';
 
@@ -43,30 +43,30 @@ export default function Navbar() {
 
         {/* Center - Pill Navigation */}
         <div className="hidden lg:flex items-center justify-center w-1/3">
-          <div className="flex items-center bg-[#1A1A1A]/20 border border-white/[0.05] p-1.5 rounded-full backdrop-blur-xl">
+          <div className="flex items-center bg-white/10 border border-white/20 p-1.5 rounded-full backdrop-blur-xl shadow-sm">
             <Link
               to="/docs"
-              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/docs') ? 'bg-[#2E2E2E] text-white shadow-sm' : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'
+              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/docs') ? 'bg-white/20 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
             >
               Docs
             </Link>
             <a
               href="#context-owner"
-              className="px-5 py-2 rounded-full text-[#888888] hover:text-white hover:bg-white/[0.04] text-[13px] font-medium transition-all"
+              className="px-5 py-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 text-[13px] font-medium transition-all"
             >
               Features
             </a>
             <Link
               to="/changelog"
-              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/changelog') ? 'bg-[#2E2E2E] text-white shadow-sm' : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'
+              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/changelog') ? 'bg-white/20 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
             >
               Versions
             </Link>
             <Link
               to="/blog"
-              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/blog') ? 'bg-[#2E2E2E] text-white shadow-sm' : 'text-[#888888] hover:text-white hover:bg-white/[0.04]'
+              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/blog') ? 'bg-white/20 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10'
                 }`}
             >
               Blog
@@ -83,27 +83,29 @@ export default function Navbar() {
 
         {/* Right - Desktop CTA */}
         <div className="hidden lg:flex items-center justify-end w-1/3 gap-4">
-          <button
-            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#1A1A1A]/30 backdrop-blur-xl hover:bg-[#1A1A1A]/80 border border-white/10 rounded-lg text-[#888888] hover:text-white transition-all text-[13px]"
-          >
-            <Search size={14} />
-            <span>Search...</span>
-            <span className="px-1.5 py-0.5 bg-white/5 rounded text-[10px] ml-2 font-mono">Ctrl K</span>
-          </button>
           <a
             href="https://github.com/animesh-94/Onboard-CLI"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#1A1A1A]/30 backdrop-blur-xl hover:bg-[#1A1A1A]/80 border border-white/10 rounded-lg text-white/60 hover:text-white transition-all"
+            className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-xl hover:bg-white/20 border border-white/20 rounded-lg text-white/90 hover:text-white transition-all shadow-sm"
           >
             <Github size={16} />
+            <span className="text-[13px] font-medium">Star</span>
             {stars !== null && (
-              <span className="text-[13px] font-medium border-l border-white/10 pl-2 ml-1">
+              <span className="flex items-center gap-1.5 text-[13px] font-medium border-l border-white/20 pl-2 ml-1">
+                <Star size={14} className="fill-yellow-500 text-yellow-500" />
                 {stars.toLocaleString()}
               </span>
             )}
           </a>
+          <button
+            onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
+            className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-xl hover:bg-white/20 border border-white/20 rounded-lg text-white/90 hover:text-white transition-all text-[13px] shadow-sm"
+          >
+            <Search size={14} />
+            <span>Search...</span>
+            <span className="px-1.5 py-0.5 bg-white/10 rounded text-[10px] ml-2 font-mono border border-white/10">Ctrl K</span>
+          </button>
         </div>
 
       </div>
