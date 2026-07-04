@@ -75,8 +75,22 @@ export default function Navbar() {
         </div>
 
         {/* Right - Mobile Toggle */}
-        <div className="flex lg:hidden items-center justify-end w-1/3">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-white/70 hover:text-white p-2 focus:outline-none">
+        <div className="flex lg:hidden items-center justify-end w-2/3 gap-2">
+          <a
+            href="https://github.com/animesh-94/Onboard-CLI"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 backdrop-blur-xl hover:bg-white/20 border border-white/20 rounded-lg text-white/90 hover:text-white transition-all shadow-sm"
+          >
+            <Github size={14} />
+            {stars !== null && (
+              <span className="flex items-center gap-1 text-[12px] font-medium border-l border-white/20 pl-1.5 ml-0.5">
+                <Star size={12} className="fill-yellow-500 text-yellow-500" />
+                {stars.toLocaleString()}
+              </span>
+            )}
+          </a>
+          <button onClick={() => setIsOpen(!isOpen)} className="text-white/70 hover:text-white p-1 focus:outline-none">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
