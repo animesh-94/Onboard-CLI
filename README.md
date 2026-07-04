@@ -91,6 +91,8 @@ Integrate `onboard drift` into your GitHub Actions workflow to enforce architect
 
 We welcome contributions! Please check out the `cmd` and `internal` directories for CLI logic, and the `ui` directory for the React frontend.
 
+Please read our [Contributing Guidelines](CONTRIBUTING.md) and [AI Usage Policy](AI_USAGE.md) before submitting a Pull Request.
+
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
