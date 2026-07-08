@@ -45,7 +45,12 @@ Invoke-WebRequest -Uri https://raw.githubusercontent.com/onboard-cli/install.ps1
 ## 💻 Usage
 
 ### 1. Initialize Project
-Generate the necessary `.onboard` configurations and `architecture.yaml` file.
+Generate the necessary `.onboard`.
+```bash
+onboard init 
+```
+
+For CI/CD fokes use below command to generate the necessary configurations and `architecture.yaml` file
 ```bash
 onboard init --template clean-architecture
 ```
