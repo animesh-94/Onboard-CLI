@@ -64,8 +64,9 @@ export default function Canvas() {
   );
 
   useEffect(() => {
-    // Try connecting to WS, fallback to mock data if it fails
-    const ws = new WebSocket('ws://localhost:3000/ws');
+    // Connect to WS on the same host/port serving this page
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const ws = new WebSocket(`${wsProtocol}//${window.location.host}/ws`);
     ws.onmessage = (event) => {
       try {
         const topology = JSON.parse(event.data);

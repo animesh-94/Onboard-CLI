@@ -15,7 +15,7 @@ https://github.com/user-attachments/assets/5f350795-de1f-44a4-95fe-e041ce3467d1
 ## 🌟 Key Features
 
 - **AST Slicing Engine**: Deep code parsing using `tree-sitter` for accurate structural node generation across multiple languages (Go, JS, TS, Python, Java).
-- **Interactive Visualizer (`map`)**: Automatically spins up a local React Flow canvas (`http://localhost:3000/app`) to visually explore code paths, dependencies, and topological maps within a specified radius.
+- **Interactive Visualizer (`map`)**: Automatically spins up a local React Flow canvas (`http://localhost:3000/app` by default) to visually explore code paths, dependencies, and topological maps within a specified radius. Use `--port` or `ONBOARD_PORT` to run on a different port.
 - **Architecture Drift Detection (`drift`)**: Analyzes codebase against `architecture.yml` rules to detect unauthorized cross-file imports and boundary violations, ensuring long-term code health.
 - **Comprehensive Ecosystem**: Built-in commands for config management, impact analysis, code exporting, owner tracking, and project pulse.
 - **Modern Tech Stack**: Blazing fast CLI written in Go, paired with a rich frontend utilizing Vite, React 19, `@xyflow/react` (React Flow), Framer Motion, and Tailwind CSS.
@@ -61,7 +61,7 @@ Trigger the context engine to map a symbol or file path, and boot up the visuali
 ```bash
 onboard map --target "internal/parser" --radius 2
 ```
-👉 *Click the provided link (http://localhost:3000/app) to view the interactive canvas. Press `Ctrl+P` in the UI to use the Fuzzy Finder! Toggle Dark Mode and Compact Mode from the top right.*
+👉 *Click the provided link (e.g. http://localhost:3000/app) to view the interactive canvas. Press `Ctrl+P` in the UI to use the Fuzzy Finder! Toggle Dark Mode and Compact Mode from the top right.*
 
 ### 3. Extract Backend Routes
 Automatically map backend API routes to their exact file and line handler locations across various frameworks (Express, Gin, FastAPI, Spring).
