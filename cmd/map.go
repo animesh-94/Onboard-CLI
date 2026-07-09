@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 
 	"github.com/onboard-cli/internal/graph"
 	"github.com/onboard-cli/internal/parser"
@@ -12,7 +14,17 @@ import (
 var (
 	target string
 	radius int
+	port   int
 )
+
+func defaultPort() int {
+	if v := os.Getenv("ONBOARD_PORT"); v != "" {
+		if p, err := strconv.Atoi(v); err == nil && p > 0 && p <= 65535 {
+			return p
+		}
+	}
+	return 3000
+}
 
 var mapCmd = &cobra.Command{
 	Use:   "map",
@@ -41,9 +53,10 @@ var mapCmd = &cobra.Command{
 		fmt.Println("--------------------------")
 
 		// Boot up the visualizer server
+		addr := fmt.Sprintf(":%d", port)
 		fmt.Println("Starting visualizer server...")
-		fmt.Println("👉 Click here to view the canvas: http://localhost:3000/app")
-		srv := server.NewServer(":3000", topology)
+		fmt.Printf("👉 Click here to view the canvas: http://localhost:%d/app\n", port)
+		srv := server.NewServer(addr, topology)
 		if err := srv.Start(); err != nil {
 			fmt.Printf("Error starting server: %v\n", err)
 		}
@@ -55,4 +68,5 @@ func init() {
 	mapCmd.Flags().StringVar(&target, "target", "", "Symbol or path to map (required)")
 	mapCmd.MarkFlagRequired("target")
 	mapCmd.Flags().IntVar(&radius, "radius", 1, "Topological distance radius for pruning (default 1)")
+	mapCmd.Flags().IntVar(&port, "port", defaultPort(), "Port for the visualizer server (env: ONBOARD_PORT)")
 }
