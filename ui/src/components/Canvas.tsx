@@ -17,8 +17,8 @@ import '@xyflow/react/dist/style.css';
 import CodeNode from './CodeNode';
 import dagre from 'dagre';
 import {
-  Play, Search, Settings, FolderOpen, Archive, UploadCloud, Download, Share2,
-  Menu, Code2, AlertTriangle, Activity, Database, GitBranch
+  Play, FolderOpen, Archive, Download, Share2,
+  Menu, Code2, Database
 } from 'lucide-react';
 import { Github } from './GithubIcon';
 
@@ -34,7 +34,7 @@ const getLayoutedElements = (nodes: Node[], edges: Edge[], direction = 'LR') => 
   const dagreGraph = new dagre.graphlib.Graph();
   dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-  const isHorizontal = direction === 'LR';
+
   // Increase ranksep (horizontal gap) and decrease nodesep (vertical gap)
   dagreGraph.setGraph({ rankdir: direction, nodesep: 30, ranksep: 900 });
 

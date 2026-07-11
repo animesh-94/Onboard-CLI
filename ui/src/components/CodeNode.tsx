@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { ChevronDown, ChevronRight, FileCode2, FunctionSquare, Box, FolderOpen } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileCode2, FolderOpen } from 'lucide-react';
 
 export default function CodeNode({ data }: { data: any }) {
   const [isExpanded, setIsExpanded] = useState(false);

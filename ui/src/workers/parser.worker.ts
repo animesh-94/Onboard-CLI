@@ -50,7 +50,7 @@ function extractNodesFromTree(tree: Parser.Tree, filePath: string): ASTNode[] {
   const nodes: ASTNode[] = [];
   
   // A simple recursive traversal to find function/class declarations
-  function traverse(node: Parser.SyntaxNode) {
+  function traverse(node: any) {
     // Identifying functions and methods (grammar-dependent, this is a generalized approach)
     if (
       node.type === 'function_declaration' || 
@@ -58,7 +58,7 @@ function extractNodesFromTree(tree: Parser.Tree, filePath: string): ASTNode[] {
       node.type === 'class_declaration'
     ) {
       // Find the identifier child which is usually the name of the function/class
-      const nameNode = node.children.find(c => c.type === 'identifier' || c.type === 'type_identifier');
+      const nameNode = node.children.find((c: any) => c.type === 'identifier' || c.type === 'type_identifier');
       
       if (nameNode) {
         nodes.push({
@@ -84,6 +84,7 @@ function extractNodesFromTree(tree: Parser.Tree, filePath: string): ASTNode[] {
 self.onmessage = async (event: MessageEvent<{ files: { path: string; content: string }[] }>) => {
   try {
     // Initialize Web Tree-Sitter runtime
+    // @ts-ignore
     await Parser.init({
       locateFile(path: string, prefix: string) {
         if (path.endsWith('.wasm')) {
@@ -94,6 +95,7 @@ self.onmessage = async (event: MessageEvent<{ files: { path: string; content: st
       }
     });
 
+    // @ts-ignore
     const parser = new Parser();
     const result: ParsedGraph = { nodes: [], edges: [] };
 

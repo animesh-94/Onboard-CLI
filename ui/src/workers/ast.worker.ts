@@ -18,18 +18,20 @@ self.onmessage = async (e) => {
       
       // 3. Initialize Web-Tree-Sitter
       self.postMessage({ type: 'PROGRESS', percent: 50 });
+      // @ts-ignore
       await Parser.init({
         locateFile() {
           return '/tree-sitter.wasm'; // Make sure this is in public folder
         }
       });
+      // @ts-ignore
       const parser = new Parser();
       // Assume javascript for now, ideally dynamically load the wasm language binding
       // const Lang = await Parser.Language.load('/tree-sitter-javascript.wasm');
       // parser.setLanguage(Lang);
 
-      const nodes = [];
-      const edges = [];
+      const nodes: any[] = [];
+      const edges: any[] = [];
       let processedCount = 0;
       const fileCount = Object.keys(zipData.files).length;
 
