@@ -1,0 +1,11 @@
+const fs = require('fs');
+const file = 'src/pages/BlogPost.tsx';
+let content = fs.readFileSync(file, 'utf8');
+content = content.replace(/selection:bg-emerald-500\/30 selection:text-emerald-200/g, 'selection:bg-white/20 selection:text-white');
+content = content.replace(/prose-lg font-serif/g, 'prose-lg');
+content = content.replace(/bg-emerald-500\/20 text-emerald-400/g, 'bg-white/10 text-zinc-300');
+content = content.replace(/first-letter:text-emerald-400/g, 'first-letter:text-white');
+content = content.replace(/marker:text-emerald-500/g, 'marker:text-zinc-500');
+content = content.replace(/text-emerald-400 bg-emerald-400\/10/g, 'text-zinc-200 bg-white/10');
+fs.writeFileSync(file, content);
+console.log('Done');

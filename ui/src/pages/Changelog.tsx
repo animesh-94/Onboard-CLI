@@ -40,11 +40,15 @@ const releases = [
 
 export default function Changelog() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans flex flex-col">
+    <div className="bg-black min-h-screen text-white font-sans flex flex-col selection:bg-white/20 selection:text-white">
       <SEO title="Versions - Onboard CLI" description="Onboard CLI release history and changelog." />
-      <Navbar />
+      
+      <div className="relative w-full max-w-[1442px] mx-auto min-h-screen border-x border-[#1c1c1c] flex flex-col">
+        <div className="w-full border-b border-[#1c1c1c]">
+          <Navbar />
+        </div>
 
-      <main className="flex-1 max-w-[1100px] mx-auto w-full px-6 md:px-8 py-20 md:py-24">
+        <main className="flex-1 max-w-[1100px] mx-auto w-full px-6 md:px-8 py-20 md:py-24">
         <div className="mb-12">
           <h1 className="text-[36px] md:text-[44px] font-bold tracking-tight mb-3 text-[#ededed]">Versions</h1>
           <p className="text-[#a1a1aa] text-[16px]">
@@ -104,6 +108,7 @@ export default function Changelog() {
       </main>
 
       <Footer />
+      </div>
     </div>
   );
 }

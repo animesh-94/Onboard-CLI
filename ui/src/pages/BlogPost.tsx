@@ -9,18 +9,22 @@ export default function Blog() {
 
   if (id === '2') {
     return (
-      <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+      <div className="bg-black min-h-screen text-zinc-300 font-sans selection:bg-white/20 selection:text-white flex flex-col">
         <SEO title="Building the Graph Abstraction Engine - Onboard CLI Blog" description="When we set out to build Onboard-CLI, we knew standard text-based analysis tools wouldn't cut it." />
-        <Navbar />
-        <main className="flex-1 max-w-[720px] mx-auto px-6 py-24 w-full">
-          <article className="prose-lg font-serif">
+        
+        <div className="relative w-full max-w-[1442px] mx-auto min-h-screen border-x border-[#1c1c1c] flex flex-col">
+          <div className="w-full border-b border-[#1c1c1c]">
+            <Navbar />
+          </div>
+          <main className="flex-1 max-w-[720px] mx-auto px-6 py-24 w-full">
+          <article className="prose-lg">
             <header className="mb-14 font-sans text-center md:text-left">
               <h1 className="text-[40px] md:text-[52px] font-bold text-white tracking-tight leading-[1.15] mb-6">
                 Building the Graph Abstraction Engine: Recursive SQL and Tree-Sitter
               </h1>
               <div className="flex items-center gap-4 text-zinc-500 text-[15px] font-medium justify-center md:justify-start">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-white/10 text-zinc-300 flex items-center justify-center font-bold text-sm">
                     A
                   </div>
                   <span>Animesh Yadav</span>
@@ -31,7 +35,7 @@ export default function Blog() {
             </header>
 
             <div className="space-y-8 text-[18px] md:text-[21px] leading-[1.8] text-[#B0B0B0]">
-              <p className="first-letter:text-6xl first-letter:font-bold first-letter:text-emerald-400 first-letter:mr-2 first-letter:float-left first-letter:leading-none">
+              <p className="first-letter:text-6xl first-letter:font-bold first-letter:text-white first-letter:mr-2 first-letter:float-left first-letter:leading-none">
                 When we set out to build Onboard-CLI, we knew standard text-based analysis tools (like grep or simple regex scripts) wouldn't cut it. Developers need to know exactly how a system connects at a topological level. To achieve this, we had to engineer a system capable of bridging low-level AST (Abstract Syntax Tree) parsing with high-speed graph traversals. Enter the Graph Abstraction Engine.
               </p>
 
@@ -41,9 +45,9 @@ export default function Blog() {
               <p>
                 At its core, the Graph Abstraction Engine consists of two primary layers operating synchronously within a native Go binary:
               </p>
-              <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-emerald-500">
-                <li><strong className="text-zinc-200">The Parser (Tree-Sitter):</strong> We embedded C-based Tree-Sitter grammars directly into Go using <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">cgo</code>. This allows the engine to parse massive Go, Python, and Java files into an incredibly dense Node tree. Using S-Expression queries, we extract only the symbols that matter (Functions, Classes, Methods).</li>
-                <li><strong className="text-zinc-200">The Local Cache (SQLite):</strong> Storing this data in memory was impossible for large monorepos. Instead, we pipe the extracted nodes and edges directly into a localized SQLite database hidden inside the <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code> folder.</li>
+              <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-zinc-500">
+                <li><strong className="text-zinc-200">The Parser (Tree-Sitter):</strong> We embedded C-based Tree-Sitter grammars directly into Go using <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">cgo</code>. This allows the engine to parse massive Go, Python, and Java files into an incredibly dense Node tree. Using S-Expression queries, we extract only the symbols that matter (Functions, Classes, Methods).</li>
+                <li><strong className="text-zinc-200">The Local Cache (SQLite):</strong> Storing this data in memory was impossible for large monorepos. Instead, we pipe the extracted nodes and edges directly into a localized SQLite database hidden inside the <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code> folder.</li>
               </ul>
 
               <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
@@ -54,7 +58,7 @@ export default function Blog() {
                 1. CGO Cross-Compilation Hell
               </h3>
               <p>
-                Because Tree-Sitter and the SQLite driver (<code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">go-sqlite3</code>) rely on C code, we ran into an immediate wall when developing on Windows. Standard Go builds would crash instantly complaining about missing C compilers. We had to forcefully inject <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">mingw64</code> into the execution paths to correctly compile the binary. It's a massive pain point for users, which is exactly why we ship pre-compiled standalone binaries!
+                Because Tree-Sitter and the SQLite driver (<code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">go-sqlite3</code>) rely on C code, we ran into an immediate wall when developing on Windows. Standard Go builds would crash instantly complaining about missing C compilers. We had to forcefully inject <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">mingw64</code> into the execution paths to correctly compile the binary. It's a massive pain point for users, which is exactly why we ship pre-compiled standalone binaries!
               </p>
 
               <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
@@ -71,10 +75,10 @@ export default function Blog() {
                 3. The Traversal Speed Limit
               </h3>
               <p>
-                With 50,000 nodes and 200,000 edges living in SQLite, running standard SQL <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">JOINs</code> to find the "Blast Radius" or "Dependencies" of a specific function took upwards of 15 seconds.
+                With 50,000 nodes and 200,000 edges living in SQLite, running standard SQL <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">JOINs</code> to find the "Blast Radius" or "Dependencies" of a specific function took upwards of 15 seconds.
               </p>
               <p>
-                <strong>The Solution:</strong> We implemented highly optimized <strong>Recursive Common Table Expressions (CTEs)</strong>. Using <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">WITH RECURSIVE bfs(...)</code>, we forced the SQLite engine—which is highly optimized in C—to perform the breadth-first search natively. What used to take 15 seconds now takes less than 80 milliseconds.
+                <strong>The Solution:</strong> We implemented highly optimized <strong>Recursive Common Table Expressions (CTEs)</strong>. Using <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">WITH RECURSIVE bfs(...)</code>, we forced the SQLite engine—which is highly optimized in C—to perform the breadth-first search natively. What used to take 15 seconds now takes less than 80 milliseconds.
               </p>
 
               <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
@@ -87,25 +91,30 @@ export default function Blog() {
           </article>
         </main>
         <Footer />
+        </div>
       </div>
     );
   }
 
   // Fallback to Blog 1 for any other ID
   return (
-    <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+    <div className="bg-black min-h-screen text-zinc-300 font-sans selection:bg-white/20 selection:text-white flex flex-col">
       <SEO title="The Architecture of Onboard-CLI - Blog" description="To build Onboard-CLI as a production-grade systems tool, you need an architecture that balances the heavy-lifting of native code analysis with a lightning-fast user experience." />
-      <Navbar />
+      
+      <div className="relative w-full max-w-[1442px] mx-auto min-h-screen border-x border-[#1c1c1c] flex flex-col">
+        <div className="w-full border-b border-[#1c1c1c]">
+          <Navbar />
+        </div>
 
       <main className="flex-1 max-w-[720px] mx-auto px-6 py-24 w-full">
-        <article className="prose-lg font-serif">
+        <article className="prose-lg">
           <header className="mb-14 font-sans text-center md:text-left">
             <h1 className="text-[40px] md:text-[52px] font-bold text-white tracking-tight leading-[1.15] mb-6">
               The Architecture of Onboard-CLI: Built for Speed and Security
             </h1>
             <div className="flex items-center gap-4 text-zinc-500 text-[15px] font-medium justify-center md:justify-start">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                <div className="w-8 h-8 rounded-full bg-white/10 text-zinc-300 flex items-center justify-center font-bold text-sm">
                   A
                 </div>
                 <span>Animesh Yadav</span>
@@ -116,7 +125,7 @@ export default function Blog() {
           </header>
 
           <div className="space-y-8 text-[18px] md:text-[21px] leading-[1.8] text-[#B0B0B0]">
-            <p className="first-letter:text-6xl first-letter:font-bold first-letter:text-emerald-400 first-letter:mr-2 first-letter:float-left first-letter:leading-none">
+            <p className="first-letter:text-6xl first-letter:font-bold first-letter:text-white first-letter:mr-2 first-letter:float-left first-letter:leading-none">
               To build Onboard-CLI as a production-grade systems tool, you need an architecture that balances the heavy-lifting of native code analysis with a lightning-fast user experience. Because your tool must operate locally (for security and speed) and handle massive codebases, it utilizes a Multi-Layered Abstraction Architecture.
             </p>
 
@@ -127,24 +136,24 @@ export default function Blog() {
             <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
               A. The Frontend Integration Layer (User Interface)
             </h3>
-            <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-emerald-500">
+            <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-zinc-500">
               <li><strong className="text-zinc-200">The CLI Controller (cobra):</strong> The entry point. Handles all CLI flags, sub-commands (drift, routes, map), and standardizes output.</li>
-              <li><strong className="text-zinc-200">The Local Web Server:</strong> When you run <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">onboard map</code>, the Go CLI spawns an ephemeral, local HTTP server using Go's net/http package. It serves a lightweight, static React bundle that interacts with the CLI via local WebSockets or a REST API to query graph data.</li>
+              <li><strong className="text-zinc-200">The Local Web Server:</strong> When you run <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">onboard map</code>, the Go CLI spawns an ephemeral, local HTTP server using Go's net/http package. It serves a lightweight, static React bundle that interacts with the CLI via local WebSockets or a REST API to query graph data.</li>
             </ul>
 
             <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
               B. The Orchestration Layer (The "Brain")
             </h3>
-            <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-emerald-500">
+            <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-zinc-500">
               <li><strong className="text-zinc-200">Tree-Sitter Engine:</strong> This is the core of the tool. It doesn't rely on regex or simple text searches. It uses tree-sitter bindings to parse your files into a real, navigable Abstract Syntax Tree (AST).</li>
               <li><strong className="text-zinc-200">Graph Traverser:</strong> This layer bridges the AST to a searchable database. It converts the hierarchical code structure into a directed graph (nodes = functions/classes/files, edges = imports/calls/injections).</li>
-              <li><strong className="text-zinc-200">SQLite Persistence Layer:</strong> To avoid re-parsing the codebase every time you run a command, all metadata is persisted in a local, hidden <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code>. This allows drift and impact to run in milliseconds, even on massive repositories.</li>
+              <li><strong className="text-zinc-200">SQLite Persistence Layer:</strong> To avoid re-parsing the codebase every time you run a command, all metadata is persisted in a local, hidden <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code>. This allows drift and impact to run in milliseconds, even on massive repositories.</li>
             </ul>
 
             <h3 className="text-[22px] font-semibold text-zinc-200 font-sans mt-10 mb-4">
               C. The Security & Execution Layer
             </h3>
-            <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-emerald-500">
+            <ul className="list-disc pl-6 space-y-3 mb-8 marker:text-zinc-500">
               <li><strong className="text-zinc-200">WebAssembly (Wasm) Runtime (wazero):</strong> Used for the (future) sandbox. By embedding this in the Go binary, you run user code in an isolated memory-space without requiring heavy Docker containers.</li>
               <li><strong className="text-zinc-200">System Resource Limiter:</strong> For native tasks, this layer uses OS-level primitives (setrlimit on Linux/macOS) to ensure the analysis tools do not crash the user's host machine.</li>
             </ul>
@@ -153,7 +162,7 @@ export default function Blog() {
               2. The Architectural Data Flow
             </h2>
             <p>The flow is designed to be deterministic and reactive:</p>
-            <ol className="list-decimal pl-6 space-y-3 mb-8 marker:text-emerald-500 font-sans text-[18px]">
+            <ol className="list-decimal pl-6 space-y-3 mb-8 marker:text-zinc-500 font-sans text-[18px]">
               <li><strong className="text-zinc-200">Ingestion:</strong> The init command recursively walks the directory tree.</li>
               <li><strong className="text-zinc-200">Normalization:</strong> Files are passed through the Tree-sitter parser, creating a language-agnostic intermediate representation.</li>
               <li><strong className="text-zinc-200">Graph Construction:</strong> The Orchestrator maps all references (imports, function calls, class instantiations) into the graph structure.</li>
@@ -177,8 +186,8 @@ export default function Blog() {
             <h2 className="text-[28px] font-bold text-white font-sans mt-16 mb-6 tracking-tight">
               4. Technical Constraints & Design Principles
             </h2>
-            <ul className="list-disc pl-6 space-y-4 mb-8 marker:text-emerald-500">
-              <li><strong className="text-zinc-200">Local-First:</strong> No telemetry. No cloud storage. All AST data stays in <code className="text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code>.</li>
+            <ul className="list-disc pl-6 space-y-4 mb-8 marker:text-zinc-500">
+              <li><strong className="text-zinc-200">Local-First:</strong> No telemetry. No cloud storage. All AST data stays in <code className="text-zinc-200 bg-white/10 px-1.5 py-0.5 rounded text-[16px] font-mono">.onboard/cache.db</code>.</li>
               <li><strong className="text-zinc-200">Tree-Sitter Dependency:</strong> All language-specific logic is isolated to the language-specific tree-sitter grammars. This makes adding support for a new language as simple as adding a new go-tree-sitter module.</li>
               <li><strong className="text-zinc-200">Zero-Copy Memory:</strong> Where possible, the Go engine uses mmap to read the SQLite cache, ensuring that visualizing even a massive monorepo does not spike the user's RAM.</li>
               <li><strong className="text-zinc-200">Non-Blocking UI:</strong> The CLI engine acts as the "backend" for the visualization canvas. This means the visualizer is never "loading"—it is simply rendering the graph that the CLI engine has already pre-processed.</li>
@@ -189,6 +198,7 @@ export default function Blog() {
       </main>
 
       <Footer />
+      </div>
     </div>
   );
 }

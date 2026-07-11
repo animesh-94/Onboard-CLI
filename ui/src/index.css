@@ -74,7 +74,7 @@
   }
   
   .prose code {
-    @apply bg-white/10 text-emerald-300 px-1.5 py-0.5 rounded text-[13px] font-mono font-medium before:content-none after:content-none;
+    @apply bg-white/10 text-zinc-300 px-1.5 py-0.5 rounded text-[13px] font-mono font-medium before:content-none after:content-none;
   }
 
   .prose pre code {
@@ -112,10 +112,10 @@
   }
 
   [data-highlighted-line] {
-    @apply bg-white/[0.05] border-emerald-500;
+    @apply bg-white/[0.05] border-white/20;
   }
 
   [data-highlighted-chars] {
-    @apply bg-emerald-500/20 rounded-md;
+    @apply bg-white/20 rounded-md;
   }
 }

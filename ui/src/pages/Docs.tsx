@@ -49,11 +49,15 @@ export default function DocsLayout() {
   const currentDoc = docsContext.find(d => d.slug === currentSlug) || docsContext[0];
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-400 font-sans selection:bg-emerald-500/30">
+    <div className="bg-black min-h-screen text-zinc-400 font-sans selection:bg-white/20 selection:text-white">
       <SEO title={`${currentDoc.title} - Onboard CLI Docs`} description={currentDoc.description} />
-      <Navbar />
+      
+      <div className="relative w-full max-w-[1442px] mx-auto min-h-screen border-x border-[#1c1c1c] flex flex-col">
+        <div className="w-full border-b border-[#1c1c1c]">
+          <Navbar />
+        </div>
 
-      <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row gap-12 pt-8 pb-24">
+        <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row gap-12 pt-8 pb-24">
 
         {/* Left Sidebar (Navigation) */}
         <aside className="w-full md:w-64 shrink-0">
@@ -67,7 +71,7 @@ export default function DocsLayout() {
                     <Link
                       to={`/docs/${doc.slug}`}
                       className={`text-sm py-1.5 px-3 -ml-3 rounded-md transition-colors ${isActive
-                        ? 'bg-emerald-500/10 text-emerald-400 font-medium'
+                        ? 'bg-white/10 text-white font-medium'
                         : 'hover:text-white hover:bg-white/5'
                         }`}
                     >
@@ -79,7 +83,7 @@ export default function DocsLayout() {
                           <a
                             key={h.hash}
                             href={`#${h.hash}`}
-                            className="text-[13px] text-zinc-500 hover:text-emerald-400 transition-colors"
+                            className="text-[13px] text-zinc-500 hover:text-white transition-colors"
                           >
                             {h.title}
                           </a>
@@ -100,7 +104,7 @@ export default function DocsLayout() {
               prose-headings:text-white prose-headings:font-semibold prose-headings:tracking-tight
               prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
               prose-p:text-zinc-400 prose-p:leading-relaxed
-              prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline
+              prose-a:text-white prose-a:no-underline hover:prose-a:underline
               prose-strong:text-zinc-200"
             >
               <div className="mb-8">
@@ -128,7 +132,7 @@ export default function DocsLayout() {
                     <div className="group relative my-5 rounded-xl bg-[#0A0A0A] border border-white/10 shadow-2xl overflow-hidden">
                       <button
                         onClick={handleCopy}
-                        className="absolute right-3 top-3 p-2 rounded-md bg-zinc-800/90 hover:bg-zinc-700 text-zinc-400 hover:text-emerald-400 opacity-0 group-hover:opacity-100 transition-all z-10 backdrop-blur-md border border-white/10"
+                        className="absolute right-3 top-3 p-2 rounded-md bg-zinc-800/90 hover:bg-zinc-700 text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all z-10 backdrop-blur-md border border-white/10"
                         title="Copy code"
                       >
                         {copied ? (
@@ -162,6 +166,7 @@ export default function DocsLayout() {
           </div>
         </aside>
 
+        </div>
       </div>
     </div>
   );

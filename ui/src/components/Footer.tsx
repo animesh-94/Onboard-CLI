@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="bg-black pt-32 pb-12 px-8 relative overflow-hidden ">
+    <footer className="relative w-full max-w-[1442px] mx-auto pt-32 pb-12 px-8 border-x border-[#1c1c1c] overflow-hidden bg-black">
       {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-emerald-500/10 blur-[150px] rounded-full pointer-events-none opacity-40" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-white/[0.03] blur-[150px] rounded-full pointer-events-none opacity-40" />
 
-      <div className="max-w-[1442px] mx-auto relative z-10">
+      <div className="w-full relative z-10">
 
         {/* Links Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-24">
@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/[0.05] gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#1c1c1c] gap-6">
           <div className="text-[14px] font-medium text-zinc-600">
             © {new Date().getFullYear()} Onboard-CLI. All rights reserved.
           </div>

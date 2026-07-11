@@ -31,11 +31,15 @@ export default function BlogIndex() {
   const sortedPosts = [...BLOG_POSTS].sort((a, b) => b.timestamp - a.timestamp);
 
   return (
-    <div className="bg-[#0A0A0A] min-h-screen text-zinc-300 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 flex flex-col">
+    <div className="bg-black min-h-screen text-zinc-300 font-sans selection:bg-white/20 selection:text-white flex flex-col">
       <SEO title="Engineering Blog - Onboard CLI" description="Read our latest engineering posts about building Onboard CLI." />
-      <Navbar />
+      
+      <div className="relative w-full max-w-[1442px] mx-auto min-h-screen border-x border-[#1c1c1c] flex flex-col">
+        <div className="w-full border-b border-[#1c1c1c]">
+          <Navbar />
+        </div>
 
-      <main className="flex-1 max-w-[800px] mx-auto px-6 py-24 w-full">
+        <main className="flex-1 max-w-[800px] mx-auto px-6 py-24 w-full">
         <header className="mb-16">
           <h1 className="text-[48px] md:text-[56px] font-bold text-white tracking-tight leading-[1.1] mb-6">
             Engineering Blog
@@ -53,7 +57,7 @@ export default function BlogIndex() {
               </Link>
 
               <div className="flex items-center gap-4 text-zinc-500 text-[14px] font-medium mb-4">
-                <span className="bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-md text-[13px] font-bold tracking-wide">
+                <span className="bg-white/10 text-zinc-300 px-2.5 py-1 rounded-md text-[13px] font-bold tracking-wide">
                   BLOG #{post.number}
                 </span>
                 <span>{post.date}</span>
@@ -61,16 +65,16 @@ export default function BlogIndex() {
                 <span>{post.time}</span>
               </div>
 
-              <h2 className="text-[28px] md:text-[32px] font-bold text-white tracking-tight leading-[1.2] mb-4 group-hover:text-emerald-400 transition-colors">
+              <h2 className="text-[28px] md:text-[32px] font-bold text-white tracking-tight leading-[1.2] mb-4 group-hover:text-white transition-colors">
                 {post.title}
               </h2>
 
-              <p className="text-[17px] text-zinc-400 leading-relaxed font-serif mb-6 line-clamp-3">
+              <p className="text-[17px] text-zinc-400 leading-relaxed mb-6 line-clamp-3">
                 {post.preview}
               </p>
 
               <div className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-[11px]">
+                <div className="w-6 h-6 rounded-full bg-white/10 text-zinc-300 flex items-center justify-center font-bold text-[11px]">
                   A
                 </div>
                 <span className="text-sm font-medium text-zinc-300">{post.author}</span>
@@ -81,6 +85,7 @@ export default function BlogIndex() {
       </main>
 
       <Footer />
+      </div>
     </div>
   );
 }

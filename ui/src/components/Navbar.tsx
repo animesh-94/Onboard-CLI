@@ -41,32 +41,26 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Center - Pill Navigation */}
+        {/* Center - Flat Navigation */}
         <div className="hidden lg:flex items-center justify-center w-1/3">
-          <div className="flex items-center bg-white/10 border border-white/20 p-1.5 rounded-full backdrop-blur-xl shadow-sm">
+          <div className="flex items-center gap-8">
             <Link
               to="/docs"
-              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/docs') ? 'bg-white/20 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10'
+              className={`text-[14px] font-medium transition-colors ${path.startsWith('/docs') ? 'text-white' : 'text-zinc-400 hover:text-white'
                 }`}
             >
               Docs
             </Link>
-            <a
-              href="#context-owner"
-              className="px-5 py-2 rounded-full text-white/80 hover:text-white hover:bg-white/10 text-[13px] font-medium transition-all"
-            >
-              Features
-            </a>
             <Link
               to="/changelog"
-              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/changelog') ? 'bg-white/20 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10'
+              className={`text-[14px] font-medium transition-colors ${path.startsWith('/changelog') ? 'text-white' : 'text-zinc-400 hover:text-white'
                 }`}
             >
               Versions
             </Link>
             <Link
               to="/blog"
-              className={`px-5 py-2 rounded-full text-[13px] font-medium transition-all ${path.startsWith('/blog') ? 'bg-white/20 text-white shadow-sm' : 'text-white/80 hover:text-white hover:bg-white/10'
+              className={`text-[14px] font-medium transition-colors ${path.startsWith('/blog') ? 'text-white' : 'text-zinc-400 hover:text-white'
                 }`}
             >
               Blog

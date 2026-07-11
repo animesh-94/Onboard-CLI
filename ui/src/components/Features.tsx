@@ -1,21 +1,21 @@
-import { FluidMatrix } from './ui/fluid-matrix';
+// import { FluidMatrix } from './ui/fluid-matrix';
 import { motion } from 'framer-motion';
 import { ShieldCheck, TerminalSquare, Unlock } from 'lucide-react';
 
 export default function Features() {
   return (
-    <section className="bg-black relative w-full overflow-hidden min-h-[600px] flex items-center">
-      <div className="absolute inset-0 w-full h-full [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_95%,transparent)]">
+    <section className="relative w-full max-w-[1442px] mx-auto min-h-[600px] border-x border-[#1c1c1c] overflow-hidden flex items-center bg-black">
+      {/* <div className="absolute inset-0 w-full h-full [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_95%,transparent)]">
         <FluidMatrix className="opacity-30" />
-      </div>
-      <div className="max-w-[1442px] mx-auto px-10 py-40 relative z-10 w-full">
+      </div> */}
+      <div className="w-full px-10 py-40 relative z-10">
         <h2 className="text-[48px] md:text-[56px] font-semibold text-white tracking-tight leading-[1.1] mb-20 max-w-[800px]">
           Zero telemetry.<br /> Enterprise-grade security by default.
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
           <div className="group">
-            <ShieldCheck className="w-8 h-8 mb-6 text-emerald-500/80 group-hover:scale-110 transition-transform" />
+            <ShieldCheck className="w-8 h-8 mb-6 text-zinc-300 group-hover:scale-110 transition-transform" />
             <h3 className="text-[18px] font-bold text-white mb-3 tracking-tight">Air-Gapped Ready</h3>
             <p className="text-[16px] text-zinc-400 font-medium leading-relaxed">
               <strong className="text-zinc-300 font-semibold block mb-1">Local-First Execution</strong>
@@ -24,7 +24,7 @@ export default function Features() {
           </div>
 
           <div className="group">
-            <TerminalSquare className="w-8 h-8 mb-6 text-emerald-500/80 group-hover:scale-110 transition-transform" />
+            <TerminalSquare className="w-8 h-8 mb-6 text-zinc-300 group-hover:scale-110 transition-transform" />
             <h3 className="text-[18px] font-bold text-white mb-3 tracking-tight">CI/CD Native</h3>
             <p className="text-[16px] text-zinc-400 font-medium leading-relaxed">
               <strong className="text-zinc-300 font-semibold block mb-1">Headless Pipeline Integration</strong>
@@ -33,7 +33,7 @@ export default function Features() {
           </div>
 
           <div className="group">
-            <Unlock className="w-8 h-8 mb-6 text-emerald-500/80 group-hover:scale-110 transition-transform" />
+            <Unlock className="w-8 h-8 mb-6 text-zinc-300 group-hover:scale-110 transition-transform" />
             <h3 className="text-[18px] font-bold text-white mb-3 tracking-tight">Open Architecture</h3>
             <p className="text-[16px] text-zinc-400 font-medium leading-relaxed">
               <strong className="text-zinc-300 font-semibold block mb-1">No Vendor Lock-In</strong>
