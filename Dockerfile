@@ -8,6 +8,7 @@ RUN npm run build
 
 # Stage 2: Build the Go backend
 FROM golang:1.26-alpine AS go-builder
+RUN apk add --no-cache gcc g++ musl-dev
 WORKDIR /app
 # Copy the go mod files first
 COPY go.mod go.sum ./
@@ -17,7 +18,7 @@ COPY . .
 # Copy the built UI into the ui/dist folder so go:embed works
 COPY --from=ui-builder /app/ui/dist ./ui/dist
 # Build the Go binary
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o onboard main.go
+RUN CGO_ENABLED=1 GOOS=linux go build -ldflags="-w -s" -o onboard main.go
 
 # Stage 3: Final minimal image
 FROM alpine:latest
