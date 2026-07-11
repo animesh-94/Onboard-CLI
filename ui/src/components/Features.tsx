@@ -9,9 +9,11 @@ export default function Features() {
         <FluidMatrix className="opacity-30" />
       </div> */}
       <div className="w-full px-10 py-40 relative z-10">
-        <h2 className="text-[48px] md:text-[56px] font-semibold text-white tracking-tight leading-[1.1] mb-20 max-w-[800px]">
-          Zero telemetry.<br /> Enterprise-grade security by default.
-        </h2>
+        <div className="flex flex-col items-center text-center mb-20">
+          <h2 className="text-[48px] md:text-[56px] font-semibold text-white tracking-tight leading-[1.1] max-w-[800px]">
+            Zero telemetry.<br /> Enterprise-grade security by default.
+          </h2>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
           <div className="group">
@@ -49,7 +51,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-[56px] md:text-[80px] font-extrabold tracking-[-0.045em] leading-[1.02] text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-700 mb-10"
+            className="text-[56px] md:text-[80px] font-sans font-semibold tracking-[-0.02em] leading-[1.02] text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-700 mb-10"
           >
             Ready to map <br /> your systems?
           </motion.h2>

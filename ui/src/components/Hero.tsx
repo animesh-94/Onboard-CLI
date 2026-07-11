@@ -120,33 +120,34 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-col w-full max-w-[650px] items-center mt-8 relative group">
-            <div className="absolute inset-0 bg-white/5 blur-[100px] rounded-full pointer-events-none group-focus-within:bg-white/10 transition-colors duration-500"></div>
-            <p className="text-[#888] text-sm mb-4 font-medium tracking-wide">Try it now with any public GitHub repository</p>
+            <div className="absolute inset-0 bg-white/5 blur-[100px] rounded-full pointer-events-none"></div>
+            <p className="text-amber-500/90 text-[13px] mb-4 font-semibold tracking-wide flex items-center gap-2 bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Cloud analyzer is temporarily paused for deployment updates
+            </p>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (repoUrl.trim()) {
-                  window.location.href = `/app?url=${encodeURIComponent(repoUrl.trim())}`;
-                }
               }}
-              className="relative flex items-center w-full bg-[#0A0A0A]/80 backdrop-blur-md border border-white/10 rounded-full focus-within:border-white/50 focus-within:ring-4 focus-within:ring-white/10 transition-all duration-300 shadow-2xl p-1.5"
+              className="relative flex items-center w-full bg-[#0A0A0A]/80 backdrop-blur-md border border-white/5 rounded-full shadow-2xl p-1.5 opacity-50 cursor-not-allowed pointer-events-none"
             >
-              <div className="pl-5 pr-3 flex items-center justify-center text-gray-400">
+              <div className="pl-5 pr-3 flex items-center justify-center text-gray-600">
                 <Github size={20} />
               </div>
               <input
                 type="text"
                 placeholder="https://github.com/facebook/react"
-                className="bg-transparent border-none outline-none text-[16px] py-3.5 w-full text-white placeholder-[#555] font-medium"
+                disabled
+                className="bg-transparent border-none outline-none text-[16px] py-3.5 w-full text-white/50 placeholder-[#444] font-medium cursor-not-allowed"
                 value={repoUrl}
                 onChange={(e) => setRepoUrl(e.target.value)}
               />
               <button
-                type="submit"
-                className="bg-white hover:bg-gray-200 text-black px-8 py-3.5 rounded-full font-semibold text-[15px] transition-all duration-300 whitespace-nowrap shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] flex items-center gap-2"
+                type="button"
+                disabled
+                className="bg-[#222] text-[#888] px-8 py-3.5 rounded-full font-semibold text-[15px] whitespace-nowrap flex items-center gap-2 cursor-not-allowed"
               >
-                Analyze Repo
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                Offline
               </button>
             </form>
           </div>
@@ -177,9 +178,31 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      {/* Aesthetic Analytics Stats Centered Below Video */}
+      <div className="relative z-10 w-full flex justify-center pb-24 -mt-16 px-6">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-20 bg-[#050505]/80 backdrop-blur-md py-8 px-12 rounded-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="flex items-baseline gap-1">
+              <span className="text-4xl md:text-5xl font-medium tracking-tighter text-white">1,000+</span>
+            </div>
+            <span className="text-[11px] font-mono tracking-[0.2em] text-[#666] uppercase">Downloads</span>
+          </div>
+
+          <div className="hidden sm:block w-[1px] h-16 bg-gradient-to-b from-transparent via-[#333] to-transparent"></div>
+
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="flex items-baseline gap-1">
+              <span className="text-4xl md:text-5xl font-medium tracking-tighter text-white">5,000+</span>
+              <span className="text-3xl font-medium text-emerald-500"></span>
+            </div>
+            <span className="text-[11px] font-mono tracking-[0.2em] text-[#666] uppercase">Repos Visualized</span>
+          </div>
+        </div>
+      </div>
+
       {/* Revamped Feature Section */}
       <div className="relative z-10 bg-black w-full pt-24 pb-0">
-        <div className="px-8 md:px-16 mb-20 max-w-[1000px]">
+        <div className="px-8 md:px-16 mb-20 max-w-[1000px] mx-auto text-center flex flex-col items-center">
           <span className="text-[11px] font-mono tracking-[0.2em] text-[#555] uppercase mb-6 block">Why Onboard</span>
           <h2 className="text-[32px] md:text-[46px] font-medium tracking-tight text-white leading-[1.15] mb-6">
             The tradeoffs other tools make, <span className="text-[#888]">solved.</span>
@@ -210,27 +233,27 @@ export default function Hero() {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/[0.02] blur-[80px] rounded-full pointer-events-none group-hover:bg-white/[0.04] transition-colors duration-500 z-0"></div>
                     {/* Media */}
                     {feature.video ? (
-                      <video 
-                        autoPlay 
-                        loop 
-                        muted 
-                        playsInline 
+                      <video
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
                         className="w-full h-full object-cover z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
                       >
                         <source src={feature.video} type="video/mp4" />
                       </video>
                     ) : (
-                      <img 
-                        src={feature.image} 
-                        alt={feature.name} 
-                        className="w-full h-full object-cover z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-500" 
+                      <img
+                        src={feature.image}
+                        alt={feature.name}
+                        className="w-full h-full object-cover z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           e.currentTarget.parentElement?.querySelector('.fallback-text')?.classList.remove('hidden');
                         }}
                       />
                     )}
-                    
+
                     {/* Fallback Text (shows if image fails to load) */}
                     {!feature.video && (
                       <div className="fallback-text hidden absolute inset-0 flex items-center justify-center text-sm text-[#555] font-mono uppercase tracking-widest z-0 text-center px-4">
