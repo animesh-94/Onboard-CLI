@@ -63,7 +63,8 @@ export function useRepositoryPipeline() {
         // --- FALLBACK CONDITION (Go Backend Microservice) ---
         console.log("Repository exceeds 50MB. Offloading to Go Backend.");
         
-        const backendResponse = await fetch('http://localhost:8080/api/parse', {
+        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        const backendResponse = await fetch(`${API_BASE_URL}/api/parse`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: repoUrl })
