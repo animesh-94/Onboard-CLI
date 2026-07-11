@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ReactFlowProvider } from '@xyflow/react';
 import Canvas from './components/Canvas';
 import Landing from './pages/Landing';
 import DocsLayout from './pages/Docs';
@@ -16,7 +17,7 @@ function App() {
         <Route path="/blog" element={<BlogIndex />} />
         <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/changelog" element={<Changelog />} />
-        <Route path="/app" element={<Canvas />} />
+        <Route path="/app" element={<ReactFlowProvider><Canvas /></ReactFlowProvider>} />
         <Route path="/docs" element={<Navigate to="/docs/getting-started" replace />} />
         <Route path="/docs/:slug" element={<DocsLayout />} />
       </Routes>

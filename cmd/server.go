@@ -76,7 +76,8 @@ func parseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Access-Control-Allow-Origin", origin)
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, Authorization, Access-Control-Request-Private-Network")
+	w.Header().Set("Access-Control-Allow-Private-Network", "true")
 
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)

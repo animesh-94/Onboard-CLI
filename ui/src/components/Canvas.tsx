@@ -9,6 +9,7 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
+  useReactFlow,
   type Connection,
   type Edge,
   type Node,
@@ -72,7 +73,9 @@ export default function Canvas() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [hasData, setHasData] = useState(false);
   const [isRoutesSidebarOpen, setIsRoutesSidebarOpen] = useState(false);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const hasAutoAnalyzed = useRef(false);
+  const { setCenter } = useReactFlow();
 
   const handleDownload = () => {
     const canvasElem = document.getElementById('canvas-container');
@@ -172,6 +175,61 @@ export default function Canvas() {
       handleAnalyze();
     }
   }, [url, handleAnalyze]);
+
+  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    setSelectedNodeId(node.id);
+    setIsRoutesSidebarOpen(true); // Open sidebar when node is clicked
+    
+    // Smoothly animate and zoom to the clicked node
+    setCenter(node.position.x + 140, node.position.y + 40, { zoom: 1.2, duration: 800 });
+  }, [setCenter]);
+
+  const onPaneClick = useCallback(() => {
+    setSelectedNodeId(null);
+  }, []);
+
+  // Compute glowing subtree whenever selection or edges change
+  const highlightedNodeIds = useMemo(() => {
+    if (!selectedNodeId) return new Set<string>();
+    const visited = new Set<string>();
+    const queue = [selectedNodeId];
+    while (queue.length > 0) {
+      const curr = queue.shift()!;
+      if (!visited.has(curr)) {
+        visited.add(curr);
+        const children = edges.filter(e => e.source === curr).map(e => e.target);
+        queue.push(...children);
+      }
+    }
+    return visited;
+  }, [selectedNodeId, edges]);
+
+  // Apply visual styling (glow/dim) dynamically to nodes and edges
+  const displayNodes = useMemo(() => {
+    if (!selectedNodeId) return nodes.map(n => ({ ...n, data: { ...n.data, isHighlighted: false, isDimmed: false }}));
+    return nodes.map(n => ({
+      ...n,
+      data: {
+        ...n.data,
+        isHighlighted: highlightedNodeIds.has(n.id),
+        isDimmed: !highlightedNodeIds.has(n.id)
+      }
+    }));
+  }, [nodes, selectedNodeId, highlightedNodeIds]);
+
+  const displayEdges = useMemo(() => {
+    if (!selectedNodeId) return edges.map(e => ({ ...e, animated: true, style: { stroke: '#3b82f6', strokeWidth: 1 }}));
+    return edges.map(e => {
+      const isHighlighted = highlightedNodeIds.has(e.source) && highlightedNodeIds.has(e.target);
+      return {
+        ...e,
+        animated: isHighlighted,
+        style: isHighlighted 
+          ? { stroke: '#10b981', strokeWidth: 2, filter: 'drop-shadow(0 0 5px rgba(16,185,129,0.5))' } 
+          : { stroke: '#222', strokeWidth: 1 }
+      };
+    });
+  }, [edges, selectedNodeId, highlightedNodeIds]);
 
   const dynamicRoutes = useMemo(() => {
     const routes: { method: string; path: string; file: string }[] = [];
@@ -351,13 +409,14 @@ export default function Canvas() {
               </p>
             </div>
           )}
-          <ReactFlowProvider>
             <ReactFlow
-              nodes={nodes}
-              edges={edges}
+              nodes={displayNodes}
+              edges={displayEdges}
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
+              onNodeClick={onNodeClick}
+              onPaneClick={onPaneClick}
               nodeTypes={nodeTypes}
               fitView
               colorMode="dark"
@@ -367,44 +426,98 @@ export default function Canvas() {
               <Background color="#333" gap={24} size={1.5} />
               <Controls className="!bg-[#0A0A0A] !border-[#222] !fill-gray-400" />
             </ReactFlow>
-          </ReactFlowProvider>
         </div>
 
 
 
-        {/* Right Sidebar: Backend Routes */}
-        {isRoutesSidebarOpen && (
+        {/* Right Sidebar: Context Panel */}
+        {(isRoutesSidebarOpen || selectedNodeId) && (
           <div className="w-[320px] bg-[#0A0A0A] border-l border-[#1c1c1c] flex flex-col shrink-0 z-10 shadow-lg">
-            <div className="p-3 border-b border-[#1c1c1c] flex items-center justify-between">
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 flex items-center gap-2">
-                <Database size={12} /> Backend Routes
-              </h3>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scrollbar-thin scrollbar-thumb-[#222] scrollbar-track-transparent">
-              {dynamicRoutes.length > 0 ? dynamicRoutes.map((route, i) => (
-                <div key={i} className="p-3 bg-[#111] border border-[#222] rounded-md">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                      route.method === 'GET' ? 'bg-blue-500/20 text-blue-400' :
-                      route.method === 'POST' ? 'bg-green-500/20 text-green-400' :
-                      route.method === 'PUT' ? 'bg-purple-500/20 text-purple-400' :
-                      route.method === 'DELETE' ? 'bg-red-500/20 text-red-400' :
-                      'bg-gray-500/20 text-gray-400'
-                    }`}>
-                      {route.method}
-                    </span>
-                    <span className="text-sm font-mono text-gray-200 truncate">{route.path}</span>
+            {selectedNodeId ? (() => {
+              const selectedNode = nodes.find(n => n.id === selectedNodeId);
+              if (!selectedNode) return null;
+              const nodeData = selectedNode.data as Record<string, any>;
+              return (
+                <>
+                  <div className="p-3 border-b border-[#1c1c1c] flex items-center justify-between bg-emerald-500/10">
+                    <h3 className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 flex items-center gap-2">
+                      <Code2 size={12} /> Node Details
+                    </h3>
                   </div>
-                  <div className="text-xs text-gray-500 font-mono mt-2 flex items-center gap-1">
-                    <FolderOpen size={10} /> {route.file}
+                  <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 scrollbar-thin scrollbar-thumb-[#222] scrollbar-track-transparent">
+                    <div>
+                      <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Name</h4>
+                      <p className="text-sm font-mono text-gray-200 break-all">{nodeData.label as string}</p>
+                    </div>
+                    <div>
+                      <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Type</h4>
+                      <span className="text-xs px-2 py-0.5 rounded bg-[#222] text-gray-300 font-mono">
+                        {nodeData.kind as string} {nodeData.extension as string}
+                      </span>
+                    </div>
+                    {nodeData.filePath && (
+                      <div>
+                        <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Path</h4>
+                        <p className="text-xs font-mono text-gray-400 break-all">{nodeData.filePath as string}</p>
+                      </div>
+                    )}
+                    {nodeData.functions && (nodeData.functions as string[]).length > 0 && (
+                      <div>
+                        <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Exported Functions</h4>
+                        <div className="flex flex-col gap-1">
+                          {(nodeData.functions as string[]).map((func, i) => (
+                            <div key={i} className="text-xs font-mono text-blue-400 bg-blue-500/10 px-2 py-1 rounded">
+                              {func}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {nodeData.snippet && (
+                      <div>
+                        <h4 className="text-[10px] text-gray-500 uppercase tracking-widest mb-2">Snippet</h4>
+                        <pre className="text-[10px] text-gray-400 font-mono bg-[#111] p-3 rounded-md overflow-x-auto border border-[#222]">
+                          <code>{nodeData.snippet as string}</code>
+                        </pre>
+                      </div>
+                    )}
                   </div>
+                </>
+              );
+            })() : (
+              <>
+                <div className="p-3 border-b border-[#1c1c1c] flex items-center justify-between">
+                  <h3 className="text-[11px] font-bold uppercase tracking-widest text-gray-400 flex items-center gap-2">
+                    <Database size={12} /> Backend Routes
+                  </h3>
                 </div>
-              )) : (
-                <div className="text-center text-gray-500 text-xs py-4">
-                  No backend routes detected in this repository.
+                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scrollbar-thin scrollbar-thumb-[#222] scrollbar-track-transparent">
+                  {dynamicRoutes.length > 0 ? dynamicRoutes.map((route, i) => (
+                    <div key={i} className="p-3 bg-[#111] border border-[#222] rounded-md">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          route.method === 'GET' ? 'bg-blue-500/20 text-blue-400' :
+                          route.method === 'POST' ? 'bg-green-500/20 text-green-400' :
+                          route.method === 'PUT' ? 'bg-purple-500/20 text-purple-400' :
+                          route.method === 'DELETE' ? 'bg-red-500/20 text-red-400' :
+                          'bg-gray-500/20 text-gray-400'
+                        }`}>
+                          {route.method}
+                        </span>
+                        <span className="text-sm font-mono text-gray-200 truncate">{route.path}</span>
+                      </div>
+                      <div className="text-xs text-gray-500 font-mono mt-2 flex items-center gap-1">
+                        <FolderOpen size={10} /> {route.file}
+                      </div>
+                    </div>
+                  )) : (
+                    <div className="text-center text-gray-500 text-xs py-4">
+                      No backend routes detected in this repository.
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
         )}
 

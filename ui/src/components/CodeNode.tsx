@@ -29,7 +29,13 @@ export default function CodeNode({ data }: { data: any }) {
   };
 
   return (
-    <div className="bg-[#0A0A0A] border border-[#222] rounded-lg shadow-2xl min-w-[250px] overflow-hidden font-mono">
+    <div className={`bg-[#0A0A0A] rounded-lg shadow-2xl min-w-[250px] overflow-hidden font-mono transition-all duration-500 ${
+      data.isHighlighted 
+        ? 'border-2 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)] transform scale-[1.02]' 
+        : data.isDimmed 
+          ? 'border border-[#222] opacity-30 grayscale-[50%]' 
+          : 'border border-[#222]'
+    }`}>
       <Handle type="target" position={Position.Left} className="!w-2 !h-2 !bg-[#222] !border-gray-500" />
       
       {/* Node Header */}
