@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { toPng } from 'html-to-image';
 import {
   ReactFlow,
-  ReactFlowProvider,
   Background,
   Controls,
   useNodesState,
@@ -176,7 +175,7 @@ export default function Canvas() {
     }
   }, [url, handleAnalyze]);
 
-  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+  const onNodeClick = useCallback((_event: React.MouseEvent, node: Node) => {
     setSelectedNodeId(node.id);
     setIsRoutesSidebarOpen(true); // Open sidebar when node is clicked
     
